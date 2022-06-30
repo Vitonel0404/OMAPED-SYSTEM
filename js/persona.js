@@ -1,15 +1,18 @@
 $(document).ready(function(){
     $('.js-example-basic-single').select2();
+    //listar();
     listarPersona();
     listarProvincia();
     listarGradoInstitucion();
     listarEstadoCivil();
+    
 })
 
 
 var indicador=false;
 var id_p=0;
 var tbl_persona;
+var tbl_persona2;
 function listarPersona() {
     tbl_persona = $("#tbl-persona").DataTable({
         "ordering": false,
@@ -32,7 +35,7 @@ function listarPersona() {
             { "data": "nombre_pe" },
             { "data": "apepat_pe" },
             { "data": "apemat_pe" },
-            { "data": "fecha_pe" },
+            //{ "data": "fecha_pe" },
             {
                 "data": "sexo_pe",
                 render: function (data, type, row) {
@@ -46,8 +49,8 @@ function listarPersona() {
             
             
             { "data": "telefono_pe" },
-            { "data": "correo_pe" },
-            { "data": "numcertdisc" },
+            /*{ "data": "correo_pe" },
+            { "data": "numcertdisc" },*/
             {
                 "data": "tipo_pe",
                 render: function (data, type, row) {
@@ -68,6 +71,7 @@ function listarPersona() {
                     }
                 }
             },
+            /*
             {
                 "data": "dependiente_pe",
                 render: function (data, type, row) {
@@ -81,10 +85,11 @@ function listarPersona() {
             
             { "data": "denominacion_esci" },
             { "data": "denominacion_grin" },
-            { "data": "distrito_ubig" },
+            { "data": "distrito_ubig" },*/
 
             { "defaultContent": "<button class='editar btn btn-primary btn-sm'><i class='fa fa-edit'></i></button>"+
-                                "<button class='ver btn btn-secondary btn-sm'><i class='fa fa-edit'></i></button>"
+                                "<button class='ver btn btn-secondary btn-sm' "+
+                                "><i class='fa fa-eye'></i></button>"
             
             },
         ],
@@ -98,6 +103,64 @@ function listarPersona() {
             cell.innerHTML = i + 1 + PageInfo.start;
         });
     });
+}
+async function listar(){
+    try {
+        const response = await fetch('../controller/persona/controlador_listar_persona.php');
+        const result= await response.json()
+        console.log(result.data);
+        if ($.fn.DataTable.isDataTable('#tbl-persona')) {
+            $('#tbl-persona').DataTable().destroy();
+        }
+        $('#tbl-persona tbody').html("");
+        for(i=0;i<result.data.length;i++){    
+            console.log(result.data[i])
+            let fila = `<tr>`;
+            fila += `<td>` + i + `</td>`;
+            fila += `<td>` + result.data[i]['dni_pe'] + `</td>`;
+            fila += `<td>` + result.data[i]['nombre_pe'] +`</td>`;
+            fila += `<td>` + result.data[i]['apepat_pe'] + `</td>`;
+            fila += `<td>` + result.data[i]['apemat_pe'] + `</td>`;
+            fila += `<td>` + result.data[i]['sexo_pe'] + `</td>`;
+            fila += `<td>` + result.data[i]['telefono_pe'] + `</td>`;
+            fila += `<td>` + result.data[i]['tipo_pe'] + `</td>`;
+            fila += `<td>` + result.data[i]['estado_pe'] + `</td>`;
+            fila += `<td>
+                        <button class='editar btn btn-primary btn-sm'><i class='fa fa-edit'></i></button>
+                        <button class='ver btn btn-secondary btn-sm' onclick=cargarDetalle()"><i class='fa fa-eye'></i></button>
+                   </td>`;
+
+            fila += `</tr>`;
+            tbl_persona2=$('#tbl-persona tbody').append(fila);
+                     
+        }
+        $('#tbl-persona').DataTable({
+            language: {
+                decimal: "",
+                emptyTable: "No hay información",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
+                infoFiltered: "(Filtrado de _MAX_ total entradas)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Mostrar _MENU_ Entradas",
+                loadingRecords: "Cargando...",
+                processing: "Procesando...",
+                search: "Buscar:",
+                zeroRecords: "Sin resultados encontrados",
+                paginate: {
+                    first: "Primero",
+                    last: "Ultimo",
+                    next: "Siguiente",
+                    previous: "Anterior",
+                },
+            },
+            lengthMenu: [5, 10, 20],
+        })
+
+    } catch (error) {
+        console.log(error);
+    }
 }
 function listarProvincia(){
     let slctProvincia = document.querySelector("#id_provincia_registrar");
@@ -513,7 +576,35 @@ function buscarTutor(){
         return Swal.fire("Mensaje de Advertencia", "Ingrese un DNI válido de 8 caracteres", "warning");  
     }
 }
-
+function buscarTutorModificar(){
+    let dni=document.querySelector('#id_dni_tutor_modificar').value;
+    let nombres=document.querySelector('#id_nombre_tutor_modificar');
+    if (dni.trim()!=''&&dni.trim().length==8) {
+        $.ajax({
+            url: '../controller/persona/controlador_buscar_tutor.php',
+            type: 'POST',
+            data: {
+                dni:dni
+            }
+        }).done( function(resp){
+            const nom=JSON.parse(resp)
+            console.log(nom)
+            if (nom.length>0) {
+                if(nom['data'][0]['estado']=='A'){
+                    nombres.value=nom['data'][0]['nombre'];
+                    indicador=true;
+                    id_p=nom['data'][0]['id_p'];
+                }else{
+                    return Swal.fire("Mensaje de Advertencia", "El representante se encuentra de baja, actualice su estado para continuar", "warning");  
+                }        
+            } else {
+                return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe como representante", "warning");  
+            }
+        })
+    } else {
+        return Swal.fire("Mensaje de Advertencia", "Ingrese un DNI válido de 8 caracteres", "warning");  
+    }
+}
 function registrarBeneficiario(){
     if (indicador) {
         const form= new FormData(document.querySelector('#form-registrar-persona-beneficiario'));
@@ -757,13 +848,14 @@ $('#tbl-persona').on('click', '.editar',async function () {
         $('#id_estado_civil_modificar').select2().val(data["id_esci"]).trigger('change.select2');
         $('#id_grado_instruccion_modificar').select2().val(data["id_grin"]).trigger('change.select2');
         $('#id_provincia_modificar').select2().val(data["provincia_ubig"]).trigger('change.select2');
+        $('#id_estado_modificar').select2().val(data["estado_pe"]).trigger('change.select2');
+        id_pers=data["id_pe"];
+        indicador=true;
         await new Promise(resolve =>{
             setTimeout(resolve,1000)
         })
         $('#id_distrito_modificar').select2().val(data["distrito_ubig"]).trigger('change.select2');
-        id_pers=data["id_pe"];
-        indicador=true;
-        console.log(id_pers)
+        
     } else {
         $("#modal-modificar-beneficiario").modal({ backdrop: 'static', keyboard: false });
         $("#modal-modificar-beneficiario").modal('show');
@@ -779,14 +871,15 @@ $('#tbl-persona').on('click', '.editar',async function () {
         $('#id_estado_civil_modificar_beneficiario').select2().val(data["id_esci"]).trigger('change.select2');
         $('#id_grado_instruccion_modificar_beneficiario').select2().val(data["id_grin"]).trigger('change.select2');
         $('#id_provincia_modificar_beneficiario').select2().val(data["provincia_ubig"]).trigger('change.select2');
+        $('#id_estado_modificar_beneficiario').select2().val(data["estado_pe"]).trigger('change.select2');
+        id_bene=data["id_pe"];
+        id_p=data["dependiente_pe"]
+        indicador=true;
         await new Promise(resolve =>{
             setTimeout(resolve,1000)
         })
         $('#id_distrito_modificar_beneficiario').select2().val(data["distrito_ubig"]).trigger('change.select2');
 
-        id_bene=data["id_pe"];
-        id_pers=data["dependiente_pe"]
-        indicador=true;
     }
     
 
@@ -816,6 +909,8 @@ function listarDistritoXprovinciaTutorModificar(){
     
 
 }
+
+
 
 function modificarRepresentante(){
     if (indicador) {
@@ -859,7 +954,7 @@ function modificarRepresentante(){
                     }
             })
         }else {
-            ValidarInputRegistroTutor('id_dni_modificar', 'valid_dni_modificar','id_nombre_modificar','valid_nombre_modificar',
+            ValidarInputModificarTutor('id_dni_modificar', 'valid_dni_modificar','id_nombre_modificar','valid_nombre_modificar',
                 'id_apepat_modificar', 'valid_apepat_modificar','id_apemat_modificar', 'valid_apemat_modificar','id_fechanac_modificar','valid_fechanac_modificar',
                 'id_sexo_modificar','valid_sexo_modificar','id_telefono_modificar','valid_telefono_modificar','id_correo_modificar','valid_correo_modificar','id_estado_civil_modificar',
                 'valid_estado_civil_modificar', 'id_grado_instruccion_modificar','valid_grado_instruccion_modificar','id_provincia_modificar','valid_provincia_modificar','id_distrito_modificar','valid_distrito_modificar',
@@ -871,7 +966,7 @@ function modificarRepresentante(){
     }
 }
 
-function ValidarInputRegistroTutor(id_dni_modificar, valid_dni_modificar,id_nombre_modificar,valid_nombre_modificar,
+function ValidarInputModificarTutor(id_dni_modificar, valid_dni_modificar,id_nombre_modificar,valid_nombre_modificar,
     id_apepat_modificar, valid_apepat_modificar,id_apemat_modificar, valid_apemat_modificar,id_fechanac_modificar,valid_fechanac_modificar,
     id_sexo_modificar,valid_sexo_modificar,id_telefono_modificar,valid_telefono_modificar,id_correo_modificar,valid_correo_modificar,id_estado_civil_modificar,
     valid_estado_civil_modificar, id_grado_instruccion_modificar,valid_grado_instruccion_modificar,id_provincia_modificar,valid_provincia_modificar,id_distrito_modificar,valid_distrito_modificar,
@@ -1036,3 +1131,268 @@ function ValidarInputRegistroTutor(id_dni_modificar, valid_dni_modificar,id_nomb
     
 }
 
+
+function listarDistritoXprovinciaBeneficiarioModificar(){
+    var valSelect=document.querySelector('#id_provincia_modificar_beneficiario').value;
+    if (valSelect!=0) {
+        let slctDistrito = document.querySelector("#id_distrito_modificar_beneficiario");
+        $.ajax({
+            url: '../controller/ubigeo/controlador_listar_distritoXprovincia.php',
+            type: 'POST',
+            data: {
+                provincia:valSelect,
+            }
+        }).done(function (response) {
+            const distrito = JSON.parse(response);
+            slctDistrito.innerHTML = '';
+            slctDistrito.innerHTML = '<option value="0">SELECCIONE</option>';
+            for (let i = 0; i < distrito["data"].length; i++) {
+                slctDistrito.innerHTML+=`
+                    <option value="${distrito['data'][i]["distrito"]}">${distrito['data'][i]["distrito"]}</option>
+                `;
+            }
+        })
+    }
+    
+
+}
+
+function ValidarInputModificarBeneficiario(id_dni_modificar_beneficiario, valid_dni_modificar_beneficiario,id_nombre_modificar_beneficiario,valid_nombre_modificar_beneficiario,
+    id_apepat_modificar_beneficiario, valid_apepat_modificar_beneficiario,id_apemat_modificar_beneficiario, valid_apemat_modificar_beneficiario,id_fechanac_modificar_beneficiario,valid_fechanac_modificar_beneficiario,
+    id_sexo_modificar_beneficiario,valid_sexo_modificar_beneficiario,id_telefono_modificar_beneficiario,valid_telefono_modificar_beneficiario,id_correo_modificar_beneficiario,valid_correo_modificar_beneficiario,id_estado_civil_modificar_beneficiario,
+    valid_estado_civil_modificar_beneficiario, id_grado_instruccion_modificar_beneficiario,valid_grado_instruccion_modificar_beneficiario,id_provincia_modificar_beneficiario,valid_provincia_modificar_beneficiario,id_distrito_modificar_beneficiario,valid_distrito_modificar_beneficiario,
+    id_estado_modificar_beneficiario,valid_estado_modificar_beneficiario
+    ) {
+    if (id_dni_modificar_beneficiario != "") {
+        if (document.getElementById(id_dni_modificar_beneficiario).value.length > 0) {
+            $("#" + id_dni_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_dni_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_dni_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_dni_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_dni_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_dni_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_nombre_modificar_beneficiario != "") {
+        if (document.getElementById(id_nombre_modificar_beneficiario).value.length > 0) {
+            $("#" + id_nombre_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_nombre_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_nombre_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_nombre_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_nombre_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_nombre_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_apepat_modificar_beneficiario != "") {
+        if (document.getElementById(id_apepat_modificar_beneficiario).value.length > 0) {
+            $("#" + id_apepat_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_apepat_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_apepat_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_apepat_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_apepat_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_apepat_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_apemat_modificar_beneficiario != "") {
+        if (document.getElementById(id_apemat_modificar_beneficiario).value.length > 0) {
+            $("#" + id_apemat_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_apemat_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_apemat_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_apemat_modificar).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_apemat_modificar).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_apemat_modificar).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_fechanac_modificar_beneficiario != "") {
+        if (document.getElementById(id_fechanac_modificar_beneficiario).value.length > 0) {
+            $("#" + id_fechanac_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_fechanac_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_fechanac_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_fechanac_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_fechanac_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_fechanac_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_sexo_modificar_beneficiario !='') {
+        if (document.getElementById(id_sexo_modificar_beneficiario).value != 0) {
+            $("#" + id_sexo_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_sexo_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_sexo_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_sexo_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_sexo_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_sexo_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_telefono_modificar_beneficiario != '') {
+        if (document.getElementById(id_telefono_modificar_beneficiario).value.length > 0) {
+            $("#" + id_telefono_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_telefono_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_telefono_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_telefono_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_telefono_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_telefono_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_correo_modificar_beneficiario != '') {
+        if (document.getElementById(id_correo_modificar_beneficiario).value.length > 0) {
+            $("#" + id_correo_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_correo_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_correo_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_correo_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_correo_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_correo_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_estado_civil_modificar_beneficiario !='') {
+        if (document.getElementById(id_estado_civil_modificar_beneficiario).value!= 0) {
+            $("#" + id_estado_civil_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_estado_civil_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_estado_civil_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_estado_civil_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_estado_civil_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_estado_civil_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_grado_instruccion_modificar_beneficiario!='') {
+        if (document.getElementById(id_grado_instruccion_modificar_beneficiario).value != 0) {
+            $("#" + id_grado_instruccion_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_grado_instruccion_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_grado_instruccion_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_grado_instruccion_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_grado_instruccion_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_grado_instruccion_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_provincia_modificar_beneficiario!='') {
+        if (document.getElementById(id_provincia_modificar_beneficiario).value != 0) {
+            $("#" + id_provincia_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_provincia_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_provincia_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_provincia_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_provincia_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_provincia_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_distrito_modificar_beneficiario !='') {
+        if (document.getElementById(id_distrito_modificar_beneficiario).value!= 0) {
+            $("#" + id_distrito_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_distrito_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_distrito_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_distrito_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_distrito_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_distrito_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_estado_modificar_beneficiario !='') {
+        if (document.getElementById(id_estado_modificar_beneficiario).value!= 0) {
+            $("#" + id_estado_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_estado_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_estado_modificar).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_estado_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_estado_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_estado_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    
+}
+
+function modificarBeneficiario(){
+    if (indicador) {
+        const form= new FormData(document.querySelector('#form-modificar-beneficiario'));
+
+        if (form.get('dni').trim()!='' &&form.get('nombre').trim()!=''&&form.get('apepat').trim()!=''&&form.get('apemat').trim()!=''
+        &&form.get('fechanac').trim()!=''&&form.get('sexo').trim()!=0&&form.get('telefono').trim()!=''&&form.get('correo').trim()!=''
+        &&form.get('estado_civil').trim()!=0&&form.get('grado_instruccion').trim()!=0&&form.get('provincia').trim()!=0&&form.get('distrito').trim()!=0&&form.get('estado')!='') {
+        console.log(form.get('fechanac').trim())
+            $.ajax({
+                url: '../controller/persona/controlador_modificar_persona.php',
+                type: 'POST',
+                data: {
+                    id:id_bene,
+                    dni:form.get('dni').trim(),
+                    nombre:form.get('nombre').trim(),
+                    apepat:form.get('apepat').trim(),
+                    apemat:form.get('apemat').trim(),
+                    fechanac:form.get('fechanac').trim(),
+                    sexo:form.get('sexo').trim(),
+                    telefono:form.get('telefono').trim(),
+                    correo:form.get('correo').trim(),
+                    numcert:form.get('numcertdisc').trim(),
+                    tipo:'D',
+                    estado:form.get('estado').trim(),
+                    dependiente:id_p,
+                    id_esci:form.get('estado_civil').trim(),
+                    id_grin:form.get('grado_instruccion').trim(),
+                    distrito:form.get('distrito').trim(),
+                }
+            }).done(function (resp) {
+                    if (resp == 1) {
+                        //limpiar_modalTipoTramiteRegistrado();
+                        return Swal.fire("Mensaje de Confirmacion", "Persona representante modificada correctamente", "success").then((value) => {
+                            //$("#modal-registro-tipo-tramite").modal('hide');
+                            tbl_persona.ajax.reload();
+        
+                        });
+                    }else if (resp == 2) {
+                        return Swal.fire("Mensaje de Advertencia", "Esta persona ya está registrada", "warning");
+                    }
+            })
+        }else {
+            ValidarInputModificarBeneficiario('id_dni_modificar_beneficiario', 'valid_dni_modificar_beneficiario','id_nombre_modificar_beneficiario','valid_nombre_modificar_beneficiario',
+                'id_apepat_modificar_beneficiario', 'valid_apepat_modificar_beneficiario','id_apemat_modificar_beneficiario', 'valid_apemat_modificar_beneficiario','id_fechanac_modificar_beneficiario','valid_fechanac_modificar_beneficiario',
+                'id_sexo_modificar_beneficiario','valid_sexo_modificar_beneficiario','id_telefono_modificar_beneficiario','valid_telefono_modificar_beneficiario','id_correo_modificar_beneficiario','valid_correo_modificar_beneficiario','id_estado_civil_modificar_beneficiario',
+                'valid_estado_civil_modificar_beneficiario', 'id_grado_instruccion_modificar_beneficiario','valid_grado_instruccion_modificar_beneficiario','id_provincia_modificar_beneficiario','valid_provincia_modificar_beneficiario','id_distrito_modificar_beneficiario','valid_distrito_modificar_beneficiario',
+                'id_estado_modificar_beneficiario','valid_estado_modificar_beneficiario'
+                )
+            return Swal.fire("!Mensaje de Advertencia!", "<b>Llene todo los campos</b>", "warning");
+        }
+    } else {
+        return Swal.fire("!Mensaje de Advertencia!", "Para registrar un beneficiario, primero busque a su representante", "warning");
+    }
+}
+
+$('#tbl-persona').on('click', '.ver',function () {
+    var data = tbl_persona.row($(this).parents('tr')).data();
+    console.log(data)
+    if (tbl_persona.row(this).child.isShown()) {
+        var data = tbl_persona.row(this).data();
+    }
+    $('.form-control').removeClass("is-invalid").removeClass("is-valid");
+    $("#modal-detalle").modal({ backdrop: 'static', keyboard: false });
+    $("#modal-detalle").modal('show');
+    document.querySelector('#fechanac').value=data['fecha_pe'];
+    document.querySelector('#correo').value=data['correo_pe'];
+    document.querySelector('#certificado').value=data['numcertdisc'];
+    document.querySelector('#representante').value=data['dependiente_pe'];
+    document.querySelector('#estadocivil').value=data['denominacion_esci'];
+    document.querySelector('#gradoinstruccion').value=data['denominacion_grin'];
+    document.querySelector('#localidad').value=data['distrito_ubig'];
+    
+
+})

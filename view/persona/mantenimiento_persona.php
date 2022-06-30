@@ -36,20 +36,14 @@
                                 <th>NOMBRE</th>
                                 <th>A. PAT</th>
                                 <th>A. MAT</th>
-                                <th>FECHA NAC</th>
                                 <th>SEXO</th>
                                 <th>TELÉFONO</th>
-                                <th>CORREO</th>
-                                <th>N° CERTEF</th>
                                 <th>T. PERSONA</th>
                                 <th>ESTADO</th>
-                                <th>DEPENDIENTE</th>
-                                <th>ESTADO CIVIL</th>
-                                <th>GRADO INST</th>
-                                <th>LOCALIDAD</th>
                                 <th>ACCION</th>
                             </tr>
                         </thead>
+                        
 
                     </table>
                 </div>
@@ -509,7 +503,7 @@
                         <div class="input-group input-group-md">
                             <input type="text" class="form-control" id="id_dni_tutor_modificar">
                             <span class="input-group-append">
-                                <button type="button" class="btn btn-info btn-flat" onclick="buscarTutor()" >Buscar</button>
+                                <button type="button" class="btn btn-info btn-flat" onclick="buscarTutorModificar()" >Buscar</button>
                             </span>
                         </div>
                     </div>
@@ -521,46 +515,46 @@
                 </div>
 
                 <hr>
-                <form action="" id="form-modificar-persona-beneficiario">
+                <form action="" id="form-modificar-beneficiario">
                     <div class="row">
                         <div class="col-3">
                             <label for="">DNI</label>
-                            <input type="text" name="dni_beneficiario" id="id_dni_modificar_beneficiario" class="form-control" onkeypress="return soloNumeros(event);">
+                            <input type="text" name="dni" id="id_dni_modificar_beneficiario" class="form-control" onkeypress="return soloNumeros(event);">
                             <div id="valid_dni_modificar_beneficiario">
                             </div>
                             </br>
                         </div> 
                         <div class="col-3">
                             <label for="">Nombre</label>
-                            <input type="text" name="nombre_beneficiario" id="id_nombre_modificar_beneficiario" class="form-control" onkeypress="return soloLetras(event);">
+                            <input type="text" name="nombre" id="id_nombre_modificar_beneficiario" class="form-control" onkeypress="return soloLetras(event);">
                             <div id="valid_nombre_modificar_beneficiario">
                             </div>
                             </br>
                         </div> 
                         <div class="col-3">
                             <label for="">Apellido Paterno</label>
-                            <input type="text" name="apepat_beneficiario" id="id_apepat_modificar_beneficiario" class="form-control" onkeypress="return soloLetras(event);">
+                            <input type="text" name="apepat" id="id_apepat_modificar_beneficiario" class="form-control" onkeypress="return soloLetras(event);">
                             <div id="valid_apepat_modificar_beneficiario">
                             </div>
                             </br>
                         </div>
                         <div class="col-3">
                             <label for="">Apellido Materno</label>
-                            <input type="text" name="apemat_beneficiario" id="id_apemat_modificar_beneficiario" class="form-control" onkeypress="return soloLetras(event);">
+                            <input type="text" name="apemat" id="id_apemat_modificar_beneficiario" class="form-control" onkeypress="return soloLetras(event);">
                             <div id="valid_apemat_modificar_beneficiario">
                             </div>
                             </br>
                         </div>
                         <div class="col-3">
                             <label for="">Fecha de Nacimiento</label>
-                            <input type="date" name="fechanac_beneficiario" id="id_fechanac_modificar_beneficiario" class="form-control">
+                            <input type="date" name="fechanac" id="id_fechanac_modificar_beneficiario" class="form-control">
                             <div id="valid_fechanac_modificar_beneficiario">
                             </div>
                             </br>
                         </div>
                         <div class="col-3">
                             <label for="">Sexo</label>
-                            <select class="js-example-basic-single " name="sexo_beneficiario" id="id_sexo_modificar_beneficiario" style="width:100%">
+                            <select class="js-example-basic-single " name="sexo" id="id_sexo_modificar_beneficiario" style="width:100%">
                                 <option value=0>SELECCIONE</option>
                                 <option value="M">MASCULINO</option>
                                 <option value="F">FEMENINO</option>
@@ -572,7 +566,7 @@
                         
                         <div class="col-3">
                             <label for="">Telefono</label>
-                            <input type="text" name="telefono_beneficiario" id="id_telefono_modificar_beneficiario" class="form-control" onkeypress="return soloNumeros(event);">
+                            <input type="text" name="telefono" id="id_telefono_modificar_beneficiario" class="form-control" onkeypress="return soloNumeros(event);">
                             <div id="valid_telefono_modificar_beneficiario">
                             </div>
                             </br>
@@ -580,14 +574,14 @@
 
                         <div class="col-3">
                             <label for="">Correo</label>
-                            <input type="text" name="correo_beneficiario" id="id_correo_modificar_beneficiario" class="form-control">
+                            <input type="text" name="correo" id="id_correo_modificar_beneficiario" class="form-control">
                             <div id="valid_correo_modificar_beneficiario">
                             </div>
                             </br>
                         </div>
                         <div class="col-2">
                             <label for="">N° certificado Disc</label>
-                            <input type="text" name="numcertdisc_beneficiario" id="id_numcertdisc_modificar_beneficiario" class="form-control" onkeypress="return soloNumeros(event);">
+                            <input type="text" name="numcertdisc" id="id_numcertdisc_modificar_beneficiario" class="form-control" onkeypress="return soloNumeros(event);">
                             <div id="valid_numcertdisc_modificar_beneficiario">
                             </div>
                             </br>
@@ -595,7 +589,7 @@
 
                         <div class="col-2">
                             <label for="">Estado Civil</label>
-                            <select class="js-example-basic-single " name="estado_civil_beneficiario" id="id_estado_civil_modificar_beneficiario" style="width:100%">
+                            <select class="js-example-basic-single " name="estado_civil" id="id_estado_civil_modificar_beneficiario" style="width:100%">
                                 
                             </select>
                             <div id="valid_estado_civil_modificar_beneficiario">
@@ -604,7 +598,7 @@
                         </div>
                         <div class="col-2">
                             <label for="">Grado Instrucción</label>
-                            <select class="js-example-basic-single " name="grado_instruccion_beneficiario" id="id_grado_instruccion_modificar_beneficiario" style="width:100%">
+                            <select class="js-example-basic-single " name="grado_instruccion" id="id_grado_instruccion_modificar_beneficiario" style="width:100%">
                                 
                             </select>
                             <div id="valid_grado_instruccion_modificar_beneficiario">
@@ -614,7 +608,7 @@
 
                         <div class="col-3">
                             <label for="">Provincia</label>
-                            <select class="js-example-basic-single " name="provincia_beneficiario" id="id_provincia_modificar_beneficiario" onchange="listarDistritoXprovinciaBeneficiario()" style="width:100%">
+                            <select class="js-example-basic-single " name="provincia" id="id_provincia_modificar_beneficiario" onchange="listarDistritoXprovinciaBeneficiarioModificar()" style="width:100%">
                                 
                             </select>
                             <div id="valid_provincia_modificar_beneficiario">
@@ -624,7 +618,7 @@
 
                         <div class="col-3">
                             <label for="">Distrito</label>
-                            <select class="js-example-basic-single " name="distrito_beneficiario" id="id_distrito_modificar_beneficiario" style="width:100%">
+                            <select class="js-example-basic-single " name="distrito" id="id_distrito_modificar_beneficiario" style="width:100%">
                                 
                             </select>
                             <div id="valid_distrito_modificar_beneficiario">
@@ -633,7 +627,7 @@
                         </div>
                         <div class="col-3">
                             <label for="">Estado</label>
-                            <select class="js-example-basic-single " name="estado_beneficiario" id="id_estado_modificar_beneficiario" style="width:100%">
+                            <select class="js-example-basic-single " name="estado" id="id_estado_modificar_beneficiario" style="width:100%">
                                 <option value="A">ACTIVO</option>
                                 <option value="I">INACTIVO</option>
                             </select>
@@ -648,6 +642,67 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="modificarBeneficiario()" >MODIFICAR</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="modal-detalle"  style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Más información</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label for="fechanac" class="col-sm-4 col-form-label">Fecha de nacimiento</label>
+                    <div class="col-sm-8">
+                        <input type="text" readonly class="form-control-plaintext" id="fechanac" value="email@example.com">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="correo" class="col-sm-4 col-form-label">Correo</label>
+                    <div class="col-sm-8">
+                        <input type="text" readonly class="form-control-plaintext" id="correo" value="email@example.com">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="certificado" class="col-sm-4 col-form-label">N° Certificado</label>
+                    <div class="col-sm-8">
+                        <input type="text" readonly class="form-control-plaintext" id="certificado" value="email@example.com">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="representante" class="col-sm-4 col-form-label">Representante</label>
+                    <div class="col-sm-8">
+                        <input type="text" readonly class="form-control-plaintext" id="representante" value="email@example.com">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="estadocivil" class="col-sm-4 col-form-label">Estado Civil</label>
+                    <div class="col-sm-8">
+                        <input type="text" readonly class="form-control-plaintext" id="estadocivil" value="email@example.com">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="gradoinstruccion" class="col-sm-4 col-form-label">Grado de instrucción</label>
+                    <div class="col-sm-8">
+                        <input type="text" readonly class="form-control-plaintext" id="gradoinstruccion" value="email@example.com">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="localidad" class="col-sm-4 col-form-label">Localidad</label>
+                    <div class="col-sm-8">
+                        <input type="text" readonly class="form-control-plaintext" id="localidad" value="email@example.com">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
           </div>
           <!-- /.modal-content -->
