@@ -340,7 +340,7 @@ function listarDistritoXprovinciaBeneficiario(){
     
 
 }
-function registrarTutor(){
+function registrarRepresentante(){
     const form= new FormData(document.querySelector('#form-registrar-persona-tutor'));
     if (form.get('dni').trim()!='' &&form.get('nombre').trim()!=''&&form.get('apepat').trim()!=''&&form.get('apemat').trim()!=''
     &&form.get('fechanac').trim()!=''&&form.get('sexo').trim()!=0&&form.get('telefono').trim()!=''&&form.get('correo').trim()!=''
@@ -555,7 +555,7 @@ function buscarTutor(){
             url: '../controller/persona/controlador_buscar_tutor.php',
             type: 'POST',
             data: {
-                dni:dni
+                dni:dni.trim()
             }
         }).done( function(resp){
             const nom=JSON.parse(resp)
@@ -584,12 +584,12 @@ function buscarTutorModificar(){
             url: '../controller/persona/controlador_buscar_tutor.php',
             type: 'POST',
             data: {
-                dni:dni
+                dni:dni.trim()
             }
         }).done( function(resp){
             const nom=JSON.parse(resp)
             console.log(nom)
-            if (nom.length>0) {
+            if (nom['data'].length>0) {
                 if(nom['data'][0]['estado']=='A'){
                     nombres.value=nom['data'][0]['nombre'];
                     indicador=true;
