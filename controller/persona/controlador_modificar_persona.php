@@ -17,8 +17,9 @@ $tipo=$_POST['tipo'];
 $estado=$_POST['estado'];
 $dependiente=$_POST['dependiente'];
 $id_esci=$_POST['id_esci'];
+$direccion=$_POST['direccion'];
 $id_grin=$_POST['id_grin'];
 $distrito=$_POST['distrito'];
-$consulta = $model-> modificarPersona($id,$dni,$nombre,$apepat,$apemat,$fechanac,$sexo,$telefono,$correo,$numcert,$tipo,$estado,$dependiente,$id_esci,$id_grin,$distrito);
+$consulta = $model-> modificarPersona($id,$dni,$nombre,$apepat,$apemat,$fechanac,$sexo,$telefono,$correo,$numcert,$tipo,$estado,$dependiente,$id_esci,$direccion,$id_grin,$distrito);
 echo json_encode($consulta);
 ?>

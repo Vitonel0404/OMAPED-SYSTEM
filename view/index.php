@@ -31,7 +31,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     <link rel="stylesheet" href="../template/dist/css/adminlte.min.css">
     <link rel="stylesheet" type="text/css" href="../utilitarios/DataTables/datatables.min.css" />
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="../template/plugins/select2/css/select2.min.css" />
     <link rel="stylesheet" type="text/css" href="../template/plugins/select2-bootstrap4-theme/select2-bootstrap4.css" />
     <link href="../css/index.css" rel="stylesheet" />
@@ -39,7 +39,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 </head>
 
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -82,16 +82,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-secondary elevation-4">
             <!-- Brand Logo -->
-            <div class="text-center">
-                <a href="index.php" class="brand-link">
-                    <!-- <img src="../img/logomuni.jpeg" alt="AdminLTE Logo" class="img-fluid float-left" >-->
-                    <span class="text-center">
-                        <b>
-                            <p style="color:FFFFFF">OMAPED</p>
-                        </b>
-                    </span>
-                </a>
-            </div>
+            
+            <a href="index.php" class="brand-link">
+                <!-- <img src="../img/logomuni.jpeg" alt="AdminLTE Logo" class="img-fluid float-left" >-->
+                <span class="text-center">
+                    <b>
+                        <p style="color:FFFFFF">OMAPED</p>
+                    </b>
+                </span>
+            </a>
+            
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user panel (optional) -->
@@ -100,7 +100,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <li class="nav-item ">
                             <a href=" " class="nav-link ">
                                 <div class="text-center">
-                                    <img src="../img/user.png" class="profile-user-img img-fluid img-circle " width='100%'><br>
+                                    <img src="../img/defaultM.png" class="profile-user-img img-fluid img-circle " width='100%'><br>
                                 </div>
                                 <div class="txt-center">
                                     <p class="text-center">
@@ -112,7 +112,87 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </div>
                             </a>
                         </li>
+                        
+
+                        <li class="nav-item menu-open">
+                            <a href="index.php" class="nav-link active">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    DASHBOARD
+                                    
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-header">MENÚ</li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-chart-pie"></i>
+                            <p>
+                                Mantenimiento
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','usuario/mantenimiento_us.php')">
+                                        <i class="nav-icon fas fa-address-card"></i>
+                                        <p>
+                                            Usuarios
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','estado_civil/mantenimiento_estado_civil.php')">
+                                        <i class="nav-icon fas fa-address-card"></i>
+                                        <p>
+                                            Estado Civil
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','grado_instruccion/mantenimiento_grado_instruccion.php')">
+                                        <i class="nav-icon fas fa-address-card"></i>
+                                        <p>
+                                            Grado Instrucción
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','persona/mantenimiento_persona.php')">
+                                        <i class="nav-icon fas fa-address-card"></i>
+                                        <p>
+                                            Persona
+                                        </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','tipo_tramite/mantenimiento_tipo_tramite.php')">
+                                        <i class="nav-icon fas fa-address-card"></i>
+                                        <p>
+                                            Tipo de trámite
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','tramite/mantenimiento_tramite.php')">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>Nuevo Trámite</p>
+                            </a>
+                        </li>
+
+                        
+
+                        
                     </ul>
+                    <input type="text" value="<?php echo $_SESSION['S_IDUSUARIO']; ?>" id="txt_idPrincipal" hidden>
+                    <input type="text" value="<?php echo $_SESSION['S_ROL']; ?>" id="txt_rolPrincipal" hidden>
                 </nav>
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
@@ -120,67 +200,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
 
                 <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-                        <li class="nav-item menu-open">
-                            <a href="index.php" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    INICIO
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-
-                        </li>
-                        <li class="nav-header">PRINCIPAL</li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','usuario/mantenimiento_us.php')">
-                                <i class="nav-icon fas fa-address-card"></i>
-                                <p>
-                                    Usuarios
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','estado_civil/mantenimiento_estado_civil.php')">
-                                <i class="nav-icon fas fa-address-card"></i>
-                                <p>
-                                    Estado Civil
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','grado_instruccion/mantenimiento_grado_instruccion.php')">
-                                <i class="nav-icon fas fa-address-card"></i>
-                                <p>
-                                    Grado Instrucción
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','persona/mantenimiento_persona.php')">
-                                <i class="nav-icon fas fa-address-card"></i>
-                                <p>
-                                    Persona
-                                </p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','tipo_tramite/mantenimiento_tipo_tramite.php')">
-                                <i class="nav-icon fas fa-address-card"></i>
-                                <p>
-                                    Tipo de trámite
-                                </p>
-                            </a>
-                        </li>
-                        
-                        
-                    </ul>
-                    <input type="text" value="<?php echo $_SESSION['S_IDUSUARIO']; ?>" id="txt_idPrincipal" hidden>
-                    <input type="text" value="<?php echo $_SESSION['S_ROL']; ?>" id="txt_rolPrincipal" hidden>
-                </nav>
+                
                 <!-- /.sidebar-menu -->
             </div>
             <!-- /.sidebar -->
@@ -190,10 +210,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper" id="contenido_principal">
             <!-- Content Header (Page header) -->
-            
-
-
-
         </div>
         <!-- /.content-wrapper -->
 

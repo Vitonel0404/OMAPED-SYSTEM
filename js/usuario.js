@@ -189,7 +189,7 @@ $('#tabla_usuario_simple').on('click', '.activar', function () {
         confirmButtonText: 'Si, Confirmar'
     }).then((result) => {
         if (result.isConfirmed) {
-            Modificar_Estatus(data["idusu"], "ACTIVO");
+            Modificar_Estatus(data["idusu"], "A");
         }
     })
 })
@@ -211,7 +211,7 @@ $('#tabla_usuario_simple').on('click', '.desactivar', function () {
         confirmButtonText: 'Si, Confirmar'
     }).then((result) => {
         if (result.isConfirmed) {
-            Modificar_Estatus(data["idusu"], "INACTIVO");
+            Modificar_Estatus(data["idusu"], "I");
         }
     })
 })

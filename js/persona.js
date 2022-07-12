@@ -54,8 +54,8 @@ function listarPersona() {
             {
                 "data": "tipo_pe",
                 render: function (data, type, row) {
-                    if (data == "D") {
-                        return "<span>Discapacitado(a)</span>";
+                    if (data == "B") {
+                        return "<span>Beneficiario(a)</span>";
                     } else {
                         return '<span>Representante</span>';
                     }
@@ -229,20 +229,22 @@ function listarEstadoCivil(){
         slctEstadoCivilBeneficiarioModificar.innerHTML = '<option value="0">SELECCIONE</option>';
 
         for (let i = 0; i < estadoCivil["data"].length; i++) {
-            
-            slctEstadoCivil.innerHTML += `
+            if (estadoCivil["data"][i]['estado_ec']=='A') {
+                slctEstadoCivil.innerHTML += `
                             <option value="${estadoCivil['data'][i]["id_ec"]}">${estadoCivil['data'][i]["denominacion_ec"]}</option>
                                     `;
-            slctEstadoCivilBeneficiario.innerHTML += `
-                            <option value="${estadoCivil['data'][i]["id_ec"]}">${estadoCivil['data'][i]["denominacion_ec"]}</option>
-                            `;
-            
-            slctEstadoCivilModificar.innerHTML += `
-                            <option value="${estadoCivil['data'][i]["id_ec"]}">${estadoCivil['data'][i]["denominacion_ec"]}</option>
+                slctEstadoCivilBeneficiario.innerHTML += `
+                                <option value="${estadoCivil['data'][i]["id_ec"]}">${estadoCivil['data'][i]["denominacion_ec"]}</option>
                                     `;
-            slctEstadoCivilBeneficiarioModificar.innerHTML += `
-                            <option value="${estadoCivil['data'][i]["id_ec"]}">${estadoCivil['data'][i]["denominacion_ec"]}</option>
-                            `;
+
+                slctEstadoCivilModificar.innerHTML += `
+                                <option value="${estadoCivil['data'][i]["id_ec"]}">${estadoCivil['data'][i]["denominacion_ec"]}</option>
+                                    `;
+                slctEstadoCivilBeneficiarioModificar.innerHTML += `
+                                <option value="${estadoCivil['data'][i]["id_ec"]}">${estadoCivil['data'][i]["denominacion_ec"]}</option>
+                                    `;
+            }
+               
         }
     })
 
@@ -274,19 +276,20 @@ function listarGradoInstitucion(){
         slctGradoInstitucionModificar.innerHTML = '<option value="0">SELECCIONE</option>';
         slctGradoInstitucionBeneficiarioModificar.innerHTML = '<option value="0">SELECCIONE</option>';
         for (let i = 0; i < gradoInstitucion["data"].length; i++) {
-            
-            slctGradoInstitucion.innerHTML += `
-                            <option value="${gradoInstitucion['data'][i]["id_gi"]}">${gradoInstitucion['data'][i]["denominacion_gi"]}</option>
-                                    `;
-            slctGradoInstitucionBeneficiario.innerHTML += `
-                            <option value="${gradoInstitucion['data'][i]["id_gi"]}">${gradoInstitucion['data'][i]["denominacion_gi"]}</option>
-                                    `;
-            slctGradoInstitucionModificar.innerHTML += `
-                            <option value="${gradoInstitucion['data'][i]["id_gi"]}">${gradoInstitucion['data'][i]["denominacion_gi"]}</option>
-                                            `;
-            slctGradoInstitucionBeneficiarioModificar.innerHTML += `
-                            <option value="${gradoInstitucion['data'][i]["id_gi"]}">${gradoInstitucion['data'][i]["denominacion_gi"]}</option>
-                                            `;
+            if (gradoInstitucion['data'][i]["estado_gi"]=='A') {
+                slctGradoInstitucion.innerHTML += `
+                                <option value="${gradoInstitucion['data'][i]["id_gi"]}">${gradoInstitucion['data'][i]["denominacion_gi"]}</option>
+                                        `;
+                slctGradoInstitucionBeneficiario.innerHTML += `
+                                <option value="${gradoInstitucion['data'][i]["id_gi"]}">${gradoInstitucion['data'][i]["denominacion_gi"]}</option>
+                                        `;
+                slctGradoInstitucionModificar.innerHTML += `
+                                <option value="${gradoInstitucion['data'][i]["id_gi"]}">${gradoInstitucion['data'][i]["denominacion_gi"]}</option>
+                                                `;
+                slctGradoInstitucionBeneficiarioModificar.innerHTML += `
+                                <option value="${gradoInstitucion['data'][i]["id_gi"]}">${gradoInstitucion['data'][i]["denominacion_gi"]}</option>
+                                                `;
+            }
         }
     })
 
@@ -345,47 +348,54 @@ function registrarRepresentante(){
     if (form.get('dni').trim()!='' &&form.get('nombre').trim()!=''&&form.get('apepat').trim()!=''&&form.get('apemat').trim()!=''
     &&form.get('fechanac').trim()!=''&&form.get('sexo').trim()!=0&&form.get('telefono').trim()!=''&&form.get('correo').trim()!=''
     &&form.get('estado_civil').trim()!=0&&form.get('grado_instruccion').trim()!=0&&form.get('provincia').trim()!=0&&form.get('distrito').trim()!=0
-
+    &&form.get('direccion').trim()!=''
     ){
-        $.ajax({
+        if (form.get('dni').trim().length==8) {
+            $.ajax({
 
-            url: '../controller/persona/controlador_registrar_persona.php',
-            type: 'POST',
-            data: {
-                dni:form.get('dni').trim(),
-                nombre:form.get('nombre').trim(),
-                apepat:form.get('apepat').trim(),
-                apemat:form.get('apemat').trim(),
-                fechanac:form.get('fechanac').trim(),
-                sexo:form.get('sexo').trim(),
-                telefono:form.get('telefono').trim(),
-                correo:form.get('correo').trim(),
-                numcert:null,
-                tipo:'R',
-                dependiente:0,
-                id_esci:form.get('estado_civil').trim(),
-                id_grin:form.get('grado_instruccion').trim(),
-                distrito:form.get('distrito').trim(),
-            }
-        }).done(function (resp) {
-                if (resp == 1) {
-                    //limpiar_modalTipoTramiteRegistrado();
-                    return Swal.fire("Mensaje de Confirmacion", "Persona representante registrado correctamente", "success").then((value) => {
-                        //$("#modal-registro-tipo-tramite").modal('hide');
-                        tbl_persona.ajax.reload();
-    
-                    });
-                }else if (resp == 2) {
-                    return Swal.fire("Mensaje de Advertencia", "Esta persona ya está registrada", "warning");
+                url: '../controller/persona/controlador_registrar_persona.php',
+                type: 'POST',
+                data: {
+                    dni:form.get('dni').trim(),
+                    nombre:form.get('nombre').trim(),
+                    apepat:form.get('apepat').trim(),
+                    apemat:form.get('apemat').trim(),
+                    fechanac:form.get('fechanac').trim(),
+                    sexo:form.get('sexo').trim(),
+                    telefono:form.get('telefono').trim(),
+                    correo:form.get('correo').trim(),
+                    numcert:null,
+                    tipo:'R',
+                    dependiente:0,
+                    id_esci:form.get('estado_civil').trim(),
+                    direccion:form.get('direccion').trim(),
+                    id_grin:form.get('grado_instruccion').trim(),
+                    distrito:form.get('distrito').trim(),
                 }
-        })
+            }).done(function (resp) {
+                    if (resp == 1) {
+                        //limpiar_modalTipoTramiteRegistrado();
+                        return Swal.fire("Mensaje de Confirmacion", "Persona representante registrado correctamente", "success").then((value) => {
+                            //$("#modal-registro-tipo-tramite").modal('hide');
+                            limpiarRegistroRepresentante();
+                            tbl_persona.ajax.reload();
+        
+                        });
+                    }else if (resp == 2) {
+                        return Swal.fire("Mensaje de Advertencia", "Esta persona ya está registrada", "warning");
+                    }
+            })
+        } else {
+            return Swal.fire("!Mensaje de Advertencia!", "<b>EL DNI debe de tener 8 caracteres</b>", "warning");
+        }
+        
         
     }else{
         
         ValidarInputRegistroTutor(
             'id_dni_registrar', 'valid_dni_registrar','id_nombre_registrar','valid_nombre_registrar',
             'id_apepat_registrar', 'valid_apepat_registrar','id_apemat_registrar', 'valid_apemat_registrar','id_fechanac_registrar','valid_fechanac_registrar',
-            'id_sexo_registrar','valid_sexo_registrar','id_telefono_registrar','valid_telefono_registrar','id_correo_registrar','valid_correo_registrar','id_estado_civil_registrar',
+            'id_direccion_registrar','valid_direccion_registrar','id_sexo_registrar','valid_sexo_registrar','id_telefono_registrar','valid_telefono_registrar','id_correo_registrar','valid_correo_registrar','id_estado_civil_registrar',
             'valid_estado_civil_registrar', 'id_grado_instruccion_registrar','valid_grado_instruccion_registrar','id_provincia_registrar','valid_provincia_registrar','id_distrito_registrar','valid_distrito_registrar'
         );
         return Swal.fire("!Mensaje de Advertencia!", "<b>Llene todo los campos</b>", "warning");
@@ -394,7 +404,7 @@ function registrarRepresentante(){
 }
 
 function ValidarInputRegistroTutor(dni, valid_dni_registrar,nombre,valid_nombre_registrar,
-    apepat, valid_apepat_registrar,apemat, valid_apemat_registrar,fechanac,valid_fechanac_registrar,
+    apepat, valid_apepat_registrar,apemat, valid_apemat_registrar,fechanac,valid_fechanac_registrar,id_direccion_registrar,valid_direccion_registrar,
     sexo,valid_sexo_registrar,telefono,valid_telefono_registrar,correo,valid_correo_registrar,estado_civil,
     valid_estado_civil_registrar, grado_instruccion,valid_grado_instruccion_registrar,provincia,valid_provincia_registrar,distrito,valid_distrito_registrar
 
@@ -458,6 +468,18 @@ function ValidarInputRegistroTutor(dni, valid_dni_registrar,nombre,valid_nombre_
             $("#" + fechanac).removeClass("is-valid").addClass("is-invalid");
             $("#" + valid_fechanac_registrar).removeClass("valid-feedback").addClass("invalid-feedback");
             document.getElementById(valid_fechanac_registrar).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_direccion_registrar !='') {
+        if (document.getElementById(id_direccion_registrar).value != 0) {
+            $("#" + id_direccion_registrar).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_direccion_registrar).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_direccion_registrar).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_direccion_registrar).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_direccion_registrar).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_direccion_registrar).innerHTML = '<b>COMPLETE EL CAMPO</b>';
         }
     }
     if (sexo !='') {
@@ -559,17 +581,22 @@ function buscarTutor(){
             }
         }).done( function(resp){
             const nom=JSON.parse(resp)
-            console.log(nom)
             if (nom['data'].length>0) {
-                if(nom['data'][0]['estado']=='A'){
-                    nombres.value=nom['data'][0]['nombre'];
-                    indicador=true;
-                    id_p=nom['data'][0]['id_p'];
-                }else{
-                    return Swal.fire("Mensaje de Advertencia", "El representante se encuentra de baja, actualice su estado para continuar", "warning");  
-                }        
+                if (nom['data'][0]['tipo']=='R') {
+                    if(nom['data'][0]['estado']=='A'){
+                        nombres.value=nom['data'][0]['nombre'];
+                        indicador=true;
+                        id_p=nom['data'][0]['id_p'];
+                    }else{
+                        return Swal.fire("Mensaje de Advertencia", "El representante se encuentra de baja, actualice su estado para continuar", "warning");  
+                    }
+                    
+                } else {
+                    return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe como representante", "warning"); 
+                }
+                        
             } else {
-                return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe como representante", "warning");  
+                return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe", "warning");  
             }
         })
     } else {
@@ -590,15 +617,20 @@ function buscarTutorModificar(){
             const nom=JSON.parse(resp)
             console.log(nom)
             if (nom['data'].length>0) {
-                if(nom['data'][0]['estado']=='A'){
-                    nombres.value=nom['data'][0]['nombre'];
-                    indicador=true;
-                    id_p=nom['data'][0]['id_p'];
-                }else{
-                    return Swal.fire("Mensaje de Advertencia", "El representante se encuentra de baja, actualice su estado para continuar", "warning");  
-                }        
+                if (nom['data'][0]['tipo']=='R') {
+                    if(nom['data'][0]['estado']=='A'){
+                        nombres.value=nom['data'][0]['nombre'];
+                        indicador=true;
+                        id_p=nom['data'][0]['id_p'];
+                    }else{
+                        return Swal.fire("Mensaje de Advertencia", "El representante se encuentra de baja, actualice su estado para continuar", "warning");  
+                    }  
+                } else {
+                    return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe como representante", "warning"); 
+                }
+                      
             } else {
-                return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe como representante", "warning");  
+                return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe", "warning");  
             }
         })
     } else {
@@ -611,46 +643,51 @@ function registrarBeneficiario(){
         if (form.get('dni_beneficiario').trim()!='' &&form.get('nombre_beneficiario').trim()!=''&&form.get('apepat_beneficiario').trim()!=''&&form.get('apemat_beneficiario').trim()!=''
         &&form.get('fechanac_beneficiario').trim()!=''&&form.get('sexo_beneficiario').trim()!=0&&form.get('telefono_beneficiario').trim()!=''&&form.get('correo_beneficiario').trim()!=''&&form.get('numcertdisc_beneficiario').trim()!=''
         &&form.get('estado_civil_beneficiario').trim()!=0&&form.get('grado_instruccion_beneficiario').trim()!=0&&form.get('provincia_beneficiario').trim()!=0&&form.get('distrito_beneficiario').trim()!=0
-
+        &&form.get('direccion_beneficiario').trim()!=''
         ){
-            $.ajax({
+            if (form.get('dni_beneficiario').trim().length==8) {
+                $.ajax({
 
-                url: '../controller/persona/controlador_registrar_persona.php',
-                type: 'POST',
-                data: {
-                    dni:form.get('dni_beneficiario').trim(),
-                    nombre:form.get('nombre_beneficiario').trim(),
-                    apepat:form.get('apepat_beneficiario').trim(),
-                    apemat:form.get('apemat_beneficiario').trim(),
-                    fechanac:form.get('fechanac_beneficiario').trim(),
-                    sexo:form.get('sexo_beneficiario').trim(),
-                    telefono:form.get('telefono_beneficiario').trim(),
-                    correo:form.get('correo_beneficiario').trim(),
-                    numcert:form.get('numcertdisc_beneficiario').trim(),
-                    tipo:'D',
-                    dependiente:id_p,
-                    id_esci:form.get('estado_civil_beneficiario').trim(),
-                    id_grin:form.get('grado_instruccion_beneficiario').trim(),
-                    distrito:form.get('distrito_beneficiario').trim(),
-                }
-            }).done(function (resp) {
-                    if (resp == 1) {
-                        //limpiar_modalTipoTramiteRegistrado();
-                        return Swal.fire("Mensaje de Confirmacion", "Persona representante registrado correctamente", "success").then((value) => {
-                            //$("#modal-registro-tipo-tramite").modal('hide');
-                            tbl_persona.ajax.reload();
-        
-                        });
-                    }else if (resp == 2) {
-                        return Swal.fire("Mensaje de Advertencia", "Esta persona ya está registrada", "warning");
+                    url: '../controller/persona/controlador_registrar_persona.php',
+                    type: 'POST',
+                    data: {
+                        dni:form.get('dni_beneficiario').trim(),
+                        nombre:form.get('nombre_beneficiario').trim(),
+                        apepat:form.get('apepat_beneficiario').trim(),
+                        apemat:form.get('apemat_beneficiario').trim(),
+                        fechanac:form.get('fechanac_beneficiario').trim(),
+                        sexo:form.get('sexo_beneficiario').trim(),
+                        telefono:form.get('telefono_beneficiario').trim(),
+                        correo:form.get('correo_beneficiario').trim(),
+                        numcert:form.get('numcertdisc_beneficiario').trim(),
+                        tipo:'B',
+                        dependiente:id_p,
+                        id_esci:form.get('estado_civil_beneficiario').trim(),
+                        direccion:form.get('direccion_beneficiario').trim(),
+                        id_grin:form.get('grado_instruccion_beneficiario').trim(),
+                        distrito:form.get('distrito_beneficiario').trim(),
                     }
-            })
+                }).done(function (resp) {
+                        if (resp == 1) {
+                            //limpiar_modalTipoTramiteRegistrado();
+                            limpiarRegistroBeneficiario();
+                            return Swal.fire("Mensaje de Confirmacion", "Persona beneficiaria registrado correctamente", "success").then((value) => {
+                                //$("#modal-registro-tipo-tramite").modal('hide');
+                                tbl_persona.ajax.reload();
             
+                            });
+                        }else if (resp == 2) {
+                            return Swal.fire("Mensaje de Advertencia", "Esta persona ya está registrada", "warning");
+                        }
+                })
+            } else {
+                return Swal.fire("!Mensaje de Advertencia!", "<b>EL DNI debe de tener 8 caracteres</b>", "warning");
+            }    
         }else{
             ValidarInputRegistroBeneficiario('id_dni_registrar_beneficiario','valid_dni_registrar_beneficiario','id_nombre_registrar_beneficiario','valid_nombre_registrar_beneficiario',
-                'id_apepat_registrar_beneficiario', 'valid_apepat_registrar_beneficiario','id_apemat_registrar_beneficiarios', 'valid_apemat_registrar_beneficiario','id_fechanac_registrar_beneficiario','valid_fechanac_registrar_beneficiario',
+                'id_apepat_registrar_beneficiario', 'valid_apepat_registrar_beneficiario','id_apemat_registrar_beneficiario', 'valid_apemat_registrar_beneficiario','id_fechanac_registrar_beneficiario','valid_fechanac_registrar_beneficiario',
                 'id_sexo_registrar_beneficiario','valid_sexo_registrar_beneficiario','id_telefono_registrar_beneficiario','valid_telefono_registrar_beneficiario','id_correo_registrar_beneficiario','valid_correo_registrar_beneficiario','id_numcertdisc_registrar_beneficiario','valid_numcertdisc_registrar_beneficiario', 'id_estado_civil_registrar_beneficiario',
-                'valid_estado_civil_registrar_beneficiario', 'id_grado_instruccion_registrar_beneficiario','valid_grado_instruccion_registrar_beneficiario','id_provincia_registrar_beneficiario','valid_provincia_registrar_beneficiario','id_distrito_registrar_beneficiario','valid_distrito_registrar_beneficiario'            
+                'valid_estado_civil_registrar_beneficiario','id_direccion_registrar_beneficiario','valid_direccion_registrar_beneficiario' ,'id_grado_instruccion_registrar_beneficiario','valid_grado_instruccion_registrar_beneficiario','id_provincia_registrar_beneficiario','valid_provincia_registrar_beneficiario','id_distrito_registrar_beneficiario','valid_distrito_registrar_beneficiario'            
                 )
             return Swal.fire("!Mensaje de Advertencia!", "<b>Llene todo los campos</b>", "warning");
         }
@@ -661,9 +698,9 @@ function registrarBeneficiario(){
 
 }
 function ValidarInputRegistroBeneficiario(id_dni_registrar_beneficiario,valid_dni_registrar_beneficiario,id_nombre_registrar_beneficiario,valid_nombre_registrar_beneficiario,
-    id_apepat_registrar_beneficiario, valid_apepat_registrar_beneficiario,id_apemat_registrar_beneficiarios, valid_apemat_registrar_beneficiario,id_fechanac_registrar_beneficiario,valid_fechanac_registrar_beneficiario,
+    id_apepat_registrar_beneficiario, valid_apepat_registrar_beneficiario,id_apemat_registrar_beneficiario, valid_apemat_registrar_beneficiario,id_fechanac_registrar_beneficiario,valid_fechanac_registrar_beneficiario,
     id_sexo_registrar_beneficiario,valid_sexo_registrar_beneficiario,id_telefono_registrar_beneficiario,valid_telefono_registrar_beneficiario,id_correo_registrar_beneficiario,valid_correo_registrar_beneficiario,id_numcertdisc_registrar_beneficiario,valid_numcertdisc_registrar_beneficiario, id_estado_civil_registrar_beneficiario,
-    valid_estado_civil_registrar_beneficiario, id_grado_instruccion_registrar_beneficiario,valid_grado_instruccion_registrar_beneficiario,id_provincia_registrar_beneficiario,valid_provincia_registrar_beneficiario,id_distrito_registrar_beneficiario,valid_distrito_registrar_beneficiario
+    valid_estado_civil_registrar_beneficiario,id_direccion_registrar_beneficiario,valid_direccion_registrar_beneficiario, id_grado_instruccion_registrar_beneficiario,valid_grado_instruccion_registrar_beneficiario,id_provincia_registrar_beneficiario,valid_provincia_registrar_beneficiario,id_distrito_registrar_beneficiario,valid_distrito_registrar_beneficiario
 
     
     ) {
@@ -703,14 +740,14 @@ function ValidarInputRegistroBeneficiario(id_dni_registrar_beneficiario,valid_dn
             document.getElementById(valid_apepat_registrar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
         }
     }
-    if (id_apemat_registrar_beneficiarios != "") {
-        if (document.getElementById(id_apemat_registrar_beneficiarios).value.length > 0) {
-            $("#" + id_apemat_registrar_beneficiarios).removeClass("is-invalid").addClass("is-valid");
+    if (id_apemat_registrar_beneficiario != "") {
+        if (document.getElementById(id_apemat_registrar_beneficiario).value.length > 0) {
+            $("#" + id_apemat_registrar_beneficiario).removeClass("is-invalid").addClass("is-valid");
             $("#" + valid_apemat_registrar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
             document.getElementById(valid_apemat_registrar_beneficiario).innerHTML = '<b>CORRECTO<b>';
         }
         else {
-            $("#" + id_apemat_registrar_beneficiarios).removeClass("is-valid").addClass("is-invalid");
+            $("#" + id_apemat_registrar_beneficiario).removeClass("is-valid").addClass("is-invalid");
             $("#" + valid_apemat_registrar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
             document.getElementById(valid_apemat_registrar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
         }
@@ -787,6 +824,18 @@ function ValidarInputRegistroBeneficiario(id_dni_registrar_beneficiario,valid_dn
             document.getElementById(valid_estado_civil_registrar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
         }
     }
+    if (id_direccion_registrar_beneficiario!='') {
+        if (document.getElementById(id_direccion_registrar_beneficiario).value != 0) {
+            $("#" + id_direccion_registrar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_direccion_registrar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_direccion_registrar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_direccion_registrar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_direccion_registrar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_direccion_registrar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
     if (id_grado_instruccion_registrar_beneficiario!='') {
         if (document.getElementById(id_grado_instruccion_registrar_beneficiario).value != 0) {
             $("#" + id_grado_instruccion_registrar_beneficiario).removeClass("is-invalid").addClass("is-valid");
@@ -846,6 +895,7 @@ $('#tbl-persona').on('click', '.editar',async function () {
         document.getElementById('id_telefono_modificar').value = data["telefono_pe"];
         document.getElementById('id_correo_modificar').value = data["correo_pe"];
         $('#id_estado_civil_modificar').select2().val(data["id_esci"]).trigger('change.select2');
+        document.getElementById('id_direccion_modificar').value = data["direccion_pe"];
         $('#id_grado_instruccion_modificar').select2().val(data["id_grin"]).trigger('change.select2');
         $('#id_provincia_modificar').select2().val(data["provincia_ubig"]).trigger('change.select2');
         $('#id_estado_modificar').select2().val(data["estado_pe"]).trigger('change.select2');
@@ -869,6 +919,7 @@ $('#tbl-persona').on('click', '.editar',async function () {
         document.getElementById('id_correo_modificar_beneficiario').value = data["correo_pe"];
         document.getElementById('id_numcertdisc_modificar_beneficiario').value = data["numcertdisc"];  
         $('#id_estado_civil_modificar_beneficiario').select2().val(data["id_esci"]).trigger('change.select2');
+        document.getElementById('id_direccion_modificar_beneficiario').value = data["direccion_pe"];  
         $('#id_grado_instruccion_modificar_beneficiario').select2().val(data["id_grin"]).trigger('change.select2');
         $('#id_provincia_modificar_beneficiario').select2().val(data["provincia_ubig"]).trigger('change.select2');
         $('#id_estado_modificar_beneficiario').select2().val(data["estado_pe"]).trigger('change.select2');
@@ -918,8 +969,9 @@ function modificarRepresentante(){
 
         if (form.get('dni').trim()!='' &&form.get('nombre').trim()!=''&&form.get('apepat').trim()!=''&&form.get('apemat').trim()!=''
         &&form.get('fechanac').trim()!=''&&form.get('sexo').trim()!=0&&form.get('telefono').trim()!=''&&form.get('correo').trim()!=''
-        &&form.get('estado_civil').trim()!=0&&form.get('grado_instruccion').trim()!=0&&form.get('provincia').trim()!=0&&form.get('distrito').trim()!=0&&form.get('estado')!='') {
-        console.log(form.get('fechanac').trim())
+        &&form.get('estado_civil').trim()!=0&&form.get('grado_instruccion').trim()!=0&&form.get('provincia').trim()!=0&&form.get('distrito').trim()!=0&&form.get('estado')!=''
+        &&form.get('direccion').trim()!='') {
+        if (form.get('dni').trim().length==8) {
             $.ajax({
                 url: '../controller/persona/controlador_modificar_persona.php',
                 type: 'POST',
@@ -938,6 +990,7 @@ function modificarRepresentante(){
                     estado:form.get('estado').trim(),
                     dependiente:0,
                     id_esci:form.get('estado_civil').trim(),
+                    direccion:form.get('direccion').trim(),
                     id_grin:form.get('grado_instruccion').trim(),
                     distrito:form.get('distrito').trim(),
                 }
@@ -945,7 +998,8 @@ function modificarRepresentante(){
                     if (resp == 1) {
                         //limpiar_modalTipoTramiteRegistrado();
                         return Swal.fire("Mensaje de Confirmacion", "Persona representante modificada correctamente", "success").then((value) => {
-                            //$("#modal-registro-tipo-tramite").modal('hide');
+                            $("#modal-modificar-representate").modal('hide');
+                            limpiarModificarRepresentante();
                             tbl_persona.ajax.reload();
         
                         });
@@ -953,10 +1007,14 @@ function modificarRepresentante(){
                         return Swal.fire("Mensaje de Advertencia", "Esta persona ya está registrada", "warning");
                     }
             })
+        } else {
+            return Swal.fire("!Mensaje de Advertencia!", "<b>EL DNI debe de tener 8 caracteres</b>", "warning");
+        }
+            
         }else {
             ValidarInputModificarTutor('id_dni_modificar', 'valid_dni_modificar','id_nombre_modificar','valid_nombre_modificar',
                 'id_apepat_modificar', 'valid_apepat_modificar','id_apemat_modificar', 'valid_apemat_modificar','id_fechanac_modificar','valid_fechanac_modificar',
-                'id_sexo_modificar','valid_sexo_modificar','id_telefono_modificar','valid_telefono_modificar','id_correo_modificar','valid_correo_modificar','id_estado_civil_modificar',
+                'id_direccion_modificar','valid_direccion_modificar','id_sexo_modificar','valid_sexo_modificar','id_telefono_modificar','valid_telefono_modificar','id_correo_modificar','valid_correo_modificar','id_estado_civil_modificar',
                 'valid_estado_civil_modificar', 'id_grado_instruccion_modificar','valid_grado_instruccion_modificar','id_provincia_modificar','valid_provincia_modificar','id_distrito_modificar','valid_distrito_modificar',
                 'id_estado_modificar','valid_estado_modificar')
             return Swal.fire("!Mensaje de Advertencia!", "<b>Llene todo los campos</b>", "warning");
@@ -968,7 +1026,7 @@ function modificarRepresentante(){
 
 function ValidarInputModificarTutor(id_dni_modificar, valid_dni_modificar,id_nombre_modificar,valid_nombre_modificar,
     id_apepat_modificar, valid_apepat_modificar,id_apemat_modificar, valid_apemat_modificar,id_fechanac_modificar,valid_fechanac_modificar,
-    id_sexo_modificar,valid_sexo_modificar,id_telefono_modificar,valid_telefono_modificar,id_correo_modificar,valid_correo_modificar,id_estado_civil_modificar,
+    id_direccion_modificar,valid_direccion_modificar,id_sexo_modificar,valid_sexo_modificar,id_telefono_modificar,valid_telefono_modificar,id_correo_modificar,valid_correo_modificar,id_estado_civil_modificar,
     valid_estado_civil_modificar, id_grado_instruccion_modificar,valid_grado_instruccion_modificar,id_provincia_modificar,valid_provincia_modificar,id_distrito_modificar,valid_distrito_modificar,
     id_estado_modificar,valid_estado_modificar
     ) {
@@ -1030,6 +1088,18 @@ function ValidarInputModificarTutor(id_dni_modificar, valid_dni_modificar,id_nom
             $("#" + id_fechanac_modificar).removeClass("is-valid").addClass("is-invalid");
             $("#" + valid_fechanac_modificar).removeClass("valid-feedback").addClass("invalid-feedback");
             document.getElementById(valid_fechanac_modificar).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_direccion_modificar !='') {
+        if (document.getElementById(id_direccion_modificar).value != 0) {
+            $("#" + id_direccion_modificar).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_direccion_modificar).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_direccion_modificar).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_sexo_modid_direccion_modificarificar).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_direccion_modificar).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_direccion_modificar).innerHTML = '<b>COMPLETE EL CAMPO</b>';
         }
     }
     if (id_sexo_modificar !='') {
@@ -1159,7 +1229,7 @@ function listarDistritoXprovinciaBeneficiarioModificar(){
 
 function ValidarInputModificarBeneficiario(id_dni_modificar_beneficiario, valid_dni_modificar_beneficiario,id_nombre_modificar_beneficiario,valid_nombre_modificar_beneficiario,
     id_apepat_modificar_beneficiario, valid_apepat_modificar_beneficiario,id_apemat_modificar_beneficiario, valid_apemat_modificar_beneficiario,id_fechanac_modificar_beneficiario,valid_fechanac_modificar_beneficiario,
-    id_sexo_modificar_beneficiario,valid_sexo_modificar_beneficiario,id_telefono_modificar_beneficiario,valid_telefono_modificar_beneficiario,id_correo_modificar_beneficiario,valid_correo_modificar_beneficiario,id_estado_civil_modificar_beneficiario,
+    id_direccion_modificar_beneficiario,valid_direccion_modificar_beneficiario,id_sexo_modificar_beneficiario,valid_sexo_modificar_beneficiario,id_telefono_modificar_beneficiario,valid_telefono_modificar_beneficiario,id_correo_modificar_beneficiario,valid_correo_modificar_beneficiario,id_estado_civil_modificar_beneficiario,
     valid_estado_civil_modificar_beneficiario, id_grado_instruccion_modificar_beneficiario,valid_grado_instruccion_modificar_beneficiario,id_provincia_modificar_beneficiario,valid_provincia_modificar_beneficiario,id_distrito_modificar_beneficiario,valid_distrito_modificar_beneficiario,
     id_estado_modificar_beneficiario,valid_estado_modificar_beneficiario
     ) {
@@ -1221,6 +1291,18 @@ function ValidarInputModificarBeneficiario(id_dni_modificar_beneficiario, valid_
             $("#" + id_fechanac_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
             $("#" + valid_fechanac_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
             document.getElementById(valid_fechanac_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
+        }
+    }
+    if (id_direccion_modificar_beneficiario !='') {
+        if (document.getElementById(id_direccion_modificar_beneficiario).value != 0) {
+            $("#" + id_direccion_modificar_beneficiario).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_direccion_modificar_beneficiario).removeClass("invalid-feedback").addClass("valid-feedback");
+            document.getElementById(valid_direccion_modificar_beneficiario).innerHTML = '<b>CORRECTO<b>';
+        }
+        else {
+            $("#" + id_direccion_modificar_beneficiario).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_direccion_modificar_beneficiario).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_direccion_modificar_beneficiario).innerHTML = '<b>COMPLETE EL CAMPO</b>';
         }
     }
     if (id_sexo_modificar_beneficiario !='') {
@@ -1328,45 +1410,52 @@ function modificarBeneficiario(){
 
         if (form.get('dni').trim()!='' &&form.get('nombre').trim()!=''&&form.get('apepat').trim()!=''&&form.get('apemat').trim()!=''
         &&form.get('fechanac').trim()!=''&&form.get('sexo').trim()!=0&&form.get('telefono').trim()!=''&&form.get('correo').trim()!=''
-        &&form.get('estado_civil').trim()!=0&&form.get('grado_instruccion').trim()!=0&&form.get('provincia').trim()!=0&&form.get('distrito').trim()!=0&&form.get('estado')!='') {
-        console.log(form.get('fechanac').trim())
-            $.ajax({
-                url: '../controller/persona/controlador_modificar_persona.php',
-                type: 'POST',
-                data: {
-                    id:id_bene,
-                    dni:form.get('dni').trim(),
-                    nombre:form.get('nombre').trim(),
-                    apepat:form.get('apepat').trim(),
-                    apemat:form.get('apemat').trim(),
-                    fechanac:form.get('fechanac').trim(),
-                    sexo:form.get('sexo').trim(),
-                    telefono:form.get('telefono').trim(),
-                    correo:form.get('correo').trim(),
-                    numcert:form.get('numcertdisc').trim(),
-                    tipo:'D',
-                    estado:form.get('estado').trim(),
-                    dependiente:id_p,
-                    id_esci:form.get('estado_civil').trim(),
-                    id_grin:form.get('grado_instruccion').trim(),
-                    distrito:form.get('distrito').trim(),
-                }
-            }).done(function (resp) {
-                    if (resp == 1) {
-                        //limpiar_modalTipoTramiteRegistrado();
-                        return Swal.fire("Mensaje de Confirmacion", "Persona representante modificada correctamente", "success").then((value) => {
-                            //$("#modal-registro-tipo-tramite").modal('hide');
-                            tbl_persona.ajax.reload();
-        
-                        });
-                    }else if (resp == 2) {
-                        return Swal.fire("Mensaje de Advertencia", "Esta persona ya está registrada", "warning");
+        &&form.get('estado_civil').trim()!=0&&form.get('grado_instruccion').trim()!=0&&form.get('provincia').trim()!=0&&form.get('distrito').trim()!=0&&form.get('estado')!=''
+        &&form.get('direccion').trim()!='') {
+            if (form.get('dni').trim().length==8) {
+                $.ajax({
+                    url: '../controller/persona/controlador_modificar_persona.php',
+                    type: 'POST',
+                    data: {
+                        id:id_bene,
+                        dni:form.get('dni').trim(),
+                        nombre:form.get('nombre').trim(),
+                        apepat:form.get('apepat').trim(),
+                        apemat:form.get('apemat').trim(),
+                        fechanac:form.get('fechanac').trim(),
+                        sexo:form.get('sexo').trim(),
+                        telefono:form.get('telefono').trim(),
+                        correo:form.get('correo').trim(),
+                        numcert:form.get('numcertdisc').trim(),
+                        tipo:'B',
+                        estado:form.get('estado').trim(),
+                        dependiente:id_p,
+                        id_esci:form.get('estado_civil').trim(),
+                        direccion:form.get('direccion').trim(),
+                        id_grin:form.get('grado_instruccion').trim(),
+                        distrito:form.get('distrito').trim(),
                     }
-            })
+                }).done(function (resp) {
+                        if (resp == 1) {
+                            //limpiar_modalTipoTramiteRegistrado();
+                            return Swal.fire("Mensaje de Confirmacion", "Persona beneficiaria modificada correctamente", "success").then((value) => {
+                                $("#modal-modificar-beneficiario").modal('hide');
+                                limpiarModificarBeneficiario();
+                                tbl_persona.ajax.reload();
+            
+                            });
+                        }else if (resp == 2) {
+                            return Swal.fire("Mensaje de Advertencia", "Esta persona ya está registrada", "warning");
+                        }
+                })
+            } else {
+                return Swal.fire("!Mensaje de Advertencia!", "<b>EL DNI debe de tener 8 caracteres</b>", "warning");
+            }
+            
         }else {
             ValidarInputModificarBeneficiario('id_dni_modificar_beneficiario', 'valid_dni_modificar_beneficiario','id_nombre_modificar_beneficiario','valid_nombre_modificar_beneficiario',
                 'id_apepat_modificar_beneficiario', 'valid_apepat_modificar_beneficiario','id_apemat_modificar_beneficiario', 'valid_apemat_modificar_beneficiario','id_fechanac_modificar_beneficiario','valid_fechanac_modificar_beneficiario',
-                'id_sexo_modificar_beneficiario','valid_sexo_modificar_beneficiario','id_telefono_modificar_beneficiario','valid_telefono_modificar_beneficiario','id_correo_modificar_beneficiario','valid_correo_modificar_beneficiario','id_estado_civil_modificar_beneficiario',
+                'id_direccion_modificar_beneficiario','valid_direccion_modificar_beneficiario','id_sexo_modificar_beneficiario','valid_sexo_modificar_beneficiario','id_telefono_modificar_beneficiario','valid_telefono_modificar_beneficiario','id_correo_modificar_beneficiario','valid_correo_modificar_beneficiario','id_estado_civil_modificar_beneficiario',
                 'valid_estado_civil_modificar_beneficiario', 'id_grado_instruccion_modificar_beneficiario','valid_grado_instruccion_modificar_beneficiario','id_provincia_modificar_beneficiario','valid_provincia_modificar_beneficiario','id_distrito_modificar_beneficiario','valid_distrito_modificar_beneficiario',
                 'id_estado_modificar_beneficiario','valid_estado_modificar_beneficiario'
                 )
@@ -1389,10 +1478,93 @@ $('#tbl-persona').on('click', '.ver',function () {
     document.querySelector('#fechanac').value=data['fecha_pe'];
     document.querySelector('#correo').value=data['correo_pe'];
     document.querySelector('#certificado').value=data['numcertdisc'];
-    document.querySelector('#representante').value=data['dependiente_pe'];
+    if (data['dependiente_pe']==0) {
+        document.querySelector('#representante').value='-';
+    } else {
+        document.querySelector('#representante').value=data['dependiente_pe'];
+    }
     document.querySelector('#estadocivil').value=data['denominacion_esci'];
+    document.querySelector('#direccion').value=data['direccion_pe'];
     document.querySelector('#gradoinstruccion').value=data['denominacion_grin'];
     document.querySelector('#localidad').value=data['distrito_ubig'];
     
 
 })
+
+function limpiarRegistroRepresentante(){
+    document.querySelector('#id_dni_registrar').value='';
+    document.querySelector('#id_nombre_registrar').value='';
+    document.querySelector('#id_apepat_registrar').value='';
+    document.querySelector('#id_apemat_registrar').value='';
+    document.querySelector('#id_fechanac_registrar').value='';
+    $('#id_sexo_registrar').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_sexo_registrar').value=0;
+    document.querySelector('#id_telefono_registrar').value='';
+    document.querySelector('#id_correo_registrar').value='';
+    $('#id_estado_civil_registrar').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_direccion_registrar').value='';
+    $('#id_grado_instruccion_registrar').select2().val(0).trigger('change.select2');
+    $('#id_provincia_registrar').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_distrito_registrar').innerHTML='';
+
+}
+function limpiarRegistroBeneficiario(){
+    indicador=false;
+    //id_p=0;
+    document.querySelector('#id_dni_tutor').value='';
+    document.querySelector('#id_nombre_tutor').value='';
+    document.querySelector('#id_dni_registrar_beneficiario').value='';
+    document.querySelector('#id_nombre_registrar_beneficiario').value='';
+    document.querySelector('#id_apepat_registrar_beneficiario').value='';
+    document.querySelector('#id_apemat_registrar_beneficiario').value='';
+    document.querySelector('#id_fechanac_registrar_beneficiario').value='';
+    $('#id_sexo_registrar_beneficiario').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_sexo_registrar_beneficiario').value=0;
+    document.querySelector('#id_telefono_registrar_beneficiario').value='';
+    document.querySelector('#id_correo_registrar_beneficiario').value='';
+    document.querySelector('#id_numcertdisc_registrar_beneficiario').value='';
+    $('#id_estado_civil_registrar_beneficiario').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_direccion_registrar_beneficiario').value='';
+    $('#id_grado_instruccion_registrar_beneficiario').select2().val(0).trigger('change.select2');
+    $('#id_provincia_registrar_beneficiario').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_distrito_registrar_beneficiario').innerHTML='';
+
+}
+function limpiarModificarRepresentante(){
+    document.querySelector('#id_dni_modificar').value='';
+    document.querySelector('#id_nombre_modificar').value='';
+    document.querySelector('#id_apepat_modificar').value='';
+    document.querySelector('#id_apemat_modificar').value='';
+    document.querySelector('#id_fechanac_modificar').value='';
+    $('#id_sexo_modificar').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_sexo_modificar').value=0;
+    document.querySelector('#id_telefono_modificar').value='';
+    document.querySelector('#id_correo_modificar').value='';
+    $('#id_estado_civil_modificar').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_direccion_modificar').value='';
+    $('#id_grado_instruccion_modificar').select2().val(0).trigger('change.select2');
+    $('#id_provincia_modificar').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_distrito_modificar').innerHTML='';
+
+}
+
+function limpiarModificarBeneficiario(){
+    document.querySelector('#id_dni_tutor_modificar').value='';
+    document.querySelector('#id_nombre_tutor_modificar').value='';
+    document.querySelector('#id_dni_modificar_beneficiario').value='';
+    document.querySelector('#id_nombre_modificar_beneficiario').value='';
+    document.querySelector('#id_apepat_modificar_beneficiario').value='';
+    document.querySelector('#id_apemat_modificar_beneficiario').value='';
+    document.querySelector('#id_fechanac_modificar_beneficiario').value='';
+    $('#id_sexo_modificar_beneficiario').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_sexo_modificar_beneficiario').value=0;
+    document.querySelector('#id_telefono_modificar_beneficiario').value='';
+    document.querySelector('#id_correo_modificar_beneficiario').value='';
+    document.querySelector('#id_numcertdisc_modificar_beneficiario').value='';
+    $('#id_estado_civil_modificar_beneficiario').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_direccion_modificar_beneficiario').value='';
+    $('#id_grado_instruccion_modificar_beneficiario').select2().val(0).trigger('change.select2');
+    $('#id_provincia_modificar_beneficiario').select2().val(0).trigger('change.select2');
+    document.querySelector('#id_distrito_modificar_beneficiario').innerHTML='';
+
+}

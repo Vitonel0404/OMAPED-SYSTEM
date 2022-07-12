@@ -33,11 +33,13 @@ session_start();
                         <li class="list-group-item list-group-item-light">
                             <b>DNI</b> <a class="float-right"><?php echo $_SESSION['S_DNI']; ?></a>
                         </li>
+                        
+                        <!--
                         <li class="list-group-item list-group-item-light">
                             <b>NIVEL</b> <a class="float-right"><?php echo $_SESSION['S_ROL']; ?></a>
                         </li>
                     </ul>
-                    <!--<a href="#" class="btn btn-primary btn-block"><b>MODIFICAR</b></a>-->
+                    <a href="#" class="btn btn-primary btn-block"><b>MODIFICAR</b></a>-->
                 </div>
 
             </div>
@@ -72,10 +74,11 @@ session_start();
                             <label for="">APELLIDO MATERNO:</label>
                             <input type="text" value="<?php echo $_SESSION['S_APEMAT']; ?>" readonly class="form-control">
                         </div>
+                        <!--
                         <div class="col-6">
                             <label for="">ROL:</label>
                             <input type="text" value="<?php echo $_SESSION['S_ROL']; ?>" readonly class="form-control">
-                        </div>
+                        </div>-->
                         <div class="col-3">
                             <label for="">CONTRASEÑA:</label>
                             <input type="password" value="<?php echo $_SESSION['S_PASS']; ?>" readonly class="form-control">

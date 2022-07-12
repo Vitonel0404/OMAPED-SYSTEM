@@ -131,7 +131,7 @@ function modificarTipoTramite(){
             }
         }).done(function (resp) {
                 if (resp == 1) {
-                    limpiar_modalTipoTramiteRegistrado();
+                    limpiar_modalTipoTramiteModificado();
                     return Swal.fire("Mensaje de Confirmacion", "Nuevo Tipo de Trámite Modificado", "success").then((value) => {
                         $("#modal-modificar-grado-instruccion").modal('hide');
                         tbl_tipo_tramite.ajax.reload(); 
@@ -145,5 +145,9 @@ function modificarTipoTramite(){
 ///////////////////////////////////////////////////////////////////////
 function limpiar_modalTipoTramiteRegistrado() {
     document.getElementById("id_denominacion_registrar").value = "";
+    id_tt=0;
+}
+function limpiar_modalTipoTramiteModificado() {
+    document.getElementById("id_denominacion_modificar").value = "";
     id_tt=0;
 }

@@ -154,6 +154,13 @@
                                         </br>
                                     </div>
                                     <div class="col-3">
+                                        <label for="">Dirección</label>
+                                        <input type="text" name="direccion" id="id_direccion_registrar" class="form-control">
+                                        <div id="valid_direccion_registrar">
+                                        </div>
+                                        </br>
+                                    </div>
+                                    <div class="col-3">
                                         <label for="">Grado Instrucción</label>
                                         <select class="js-example-basic-single " name="grado_instruccion" id="id_grado_instruccion_registrar" style="width:100%">
                                             
@@ -238,7 +245,7 @@
                                     </div>
                                     <div class="col-3">
                                         <label for="">Apellido Materno</label>
-                                        <input type="text" name="apemat_beneficiario" id="id_apemat_registrar_beneficiarios" class="form-control" onkeypress="return soloLetras(event);">
+                                        <input type="text" name="apemat_beneficiario" id="id_apemat_registrar_beneficiario" class="form-control" onkeypress="return soloLetras(event);">
                                         <div id="valid_apemat_registrar_beneficiario">
                                         </div>
                                         </br>
@@ -291,6 +298,13 @@
                                             
                                         </select>
                                         <div id="valid_estado_civil_registrar_beneficiario">
+                                        </div>
+                                        </br>
+                                    </div>
+                                    <div class="col-3">
+                                        <label for="">Dirección</label>
+                                        <input type="text" name="direccion_beneficiario" id="id_direccion_registrar_beneficiario" class="form-control">
+                                        <div id="valid_direccion_registrar_beneficiario">
                                         </div>
                                         </br>
                                     </div>
@@ -430,6 +444,13 @@
                                 
                             </select>
                             <div id="valid_estado_civil_modificar">
+                            </div>
+                            </br>
+                        </div>
+                        <div class="col-3">
+                            <label for="">Dirección</label>
+                            <input type="text" name="direccion" id="id_direccion_modificar" class="form-control">
+                            <div id="valid_direccion_modificar">
                             </div>
                             </br>
                         </div>
@@ -596,6 +617,13 @@
                             </div>
                             </br>
                         </div>
+                        <div class="col-3">
+                            <label for="">Dirección</label>
+                            <input type="text" name="direccion" id="id_direccion_modificar_beneficiario" class="form-control">
+                            <div id="valid_direccion_modificar_beneficiario">
+                            </div>
+                            </br>
+                        </div>
                         <div class="col-2">
                             <label for="">Grado Instrucción</label>
                             <select class="js-example-basic-single " name="grado_instruccion" id="id_grado_instruccion_modificar_beneficiario" style="width:100%">
@@ -686,6 +714,12 @@
                     <label for="estadocivil" class="col-sm-4 col-form-label">Estado Civil</label>
                     <div class="col-sm-8">
                         <input type="text" readonly class="form-control-plaintext" id="estadocivil" value="email@example.com">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="estadocivil" class="col-sm-4 col-form-label">Dirección</label>
+                    <div class="col-sm-8">
+                        <input type="text" readonly class="form-control-plaintext" id="direccion" value="email@example.com">
                     </div>
                 </div>
                 <div class="form-group row">
