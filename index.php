@@ -6,72 +6,41 @@ if (isset($_SESSION['S_IDUSUARIO'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SISTEMA MUNI</title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="template/plugins/fontawesome-free/css/all.min.css">
-    <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="template/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-    <!-- Theme style -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="template/dist/css/adminlte.min.css">
+    <title>Registro de Trámites OMAPED</title>
 </head>
+<body>
+<div class="parent clearfix">
+    <div class="bg-illustration">
+        <img src="img/imgLogin.svg" alt="logo">
+        
+    </div>
+    
+    <div class="login">
+      <div class="container">
+      <img src="img/logomuni.jpeg" height="auto" width="500px" class="img-fluid">
+    
+        <div class="login-form">
+          <form action="">
+            <input type="email" placeholder="Usuario" id="txtUsu">
+            <input type="password" placeholder="Contraseña"  id="txtPass">
 
-<body class="hold-transition login-page">
-    <div class="login-box">
-        <!-- /.login-logo -->
-        <div class="card card-outline card-primary">
-            <div class="card-header text-center container border ">
-                <!-- <a href="template/index2.html" class="h1"><b>Admin</b>LTE</a>-->
-                <img src="img/logomuni.jpeg" height="auto" width="500px" class="img-fluid">
-            </div>
-            <div class="card-body">
-                <div class="input-group mb-3">
-                    <input type="txt" class="form-control" placeholder="Usuario" id="txtUsu">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <input type="password" class="form-control" placeholder="Password" id="txtPass">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary btn-block" onclick="iniciar_Sesion()">INGRESAR</button>
-                    </div>
-                    <!-- /.col -->
-                </div>
-            </div>
-            <div class="card-body container border">
-                <img src="img/logoMuni.jpg" class=" img-fluid " width="60px">
-                <font size=2.5 style="float:right" class="mt-4 mr-3"> <strong>&copy; Copyright MPCH GTIE</strong> All rights reserved.
-                </font>
-
-
-            </div>
-            
+            <button type="button" onclick="iniciar_Sesion()">Iniciar Sesión</button>
+          </form>
+          
         </div>
-        <!-- /.card-body -->
-    </div>
-    <!-- /.card -->
-    </div>
-    <!-- /.login-box -->
-
-    <!-- jQuery -->
-    <script src="template/plugins/jquery/jquery.min.js"></script>
+    
+      </div>
+      </div>
+            
+</div>
+  <script src="template/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="template/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
@@ -80,5 +49,4 @@ if (isset($_SESSION['S_IDUSUARIO'])) {
     <script src="js/usuario.js?rev=<?php echo time() ///para recgar el js 
                                     ?>"></script>
 </body>
-
 </html>

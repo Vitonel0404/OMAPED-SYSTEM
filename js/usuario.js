@@ -116,6 +116,7 @@ function listado_usu_simple() {
             { "data": "apepatusu" },
             { "data": "apematusu" },
             { "data": "usua_nombre" },
+            { "data": "correousu" },
             //{ "data": "usua_estado" },
             /*{
                 "data": "usua_nivel",
@@ -259,6 +260,7 @@ function registrar_usuario() {
     let apellido_p = document.getElementById("txt_aPaterno").value;
     let apellido_m = document.getElementById("txt_aMaterno").value;
     let contraseña = document.getElementById("txt_contraseña").value;
+    let correo = document.getElementById("txt_correo").value;
     //let nivel = document.getElementById("select_nivel").value;
 
     //document.getElementById("valid_dni").value;
@@ -269,9 +271,9 @@ function registrar_usuario() {
     }
     document.getElementById("valid_nivel").innerHTML = '<font size=2 color="green"><b>CORRECTO</b></font>';
 */
-    if (dni.length == 0 || dni.length < 8 || apellido_p.length == 0 || apellido_m.length == 0 || contraseña.length == 0 || contraseña.length < 8 || nombre.length == 0) {
+    if (dni.length == 0 || dni.length < 8 || apellido_p.length == 0 || apellido_m.length == 0 || contraseña.length == 0 || contraseña.length < 8 || nombre.length == 0 || correo.length==0) {
         ValidarInputRegisUsuario("txt_dni", "txt_nombre", "txt_aPaterno", "txt_aMaterno", "txt_contraseña",
-            "valid_dni", "valid_nombre", "valid_apepat", "valid_apemat", "valid_contrasena");/// para que se me muesree lo rojo
+            "valid_dni", "valid_nombre", "valid_apepat", "valid_apemat", "valid_contrasena",'txt_correo','valid_correo');/// para que se me muesree lo rojo
         return Swal.fire("!Mensaje de Advertencia!", "<b>Llene todo los campos</b>", "warning");
 
     }
@@ -286,6 +288,7 @@ function registrar_usuario() {
             nombre: nombre,
             apepat: apellido_p,
             apemat: apellido_m,
+            correo:correo,
             contra: contraseña,
 
         }
@@ -299,8 +302,13 @@ function registrar_usuario() {
                     tbl_usuario_simple.ajax.reload();
 
                 });
+            }else if (resp == 2) {
+                return Swal.fire("Mensaje de Advertencia", "Este usuario ya esta Registrado", "warning");
+
+            } else {
+                return Swal.fire("Mensaje de Advertencia", "El correo electrónico ya está registrado, ingrese otro.", "warning");
+
             }
-            return Swal.fire("Mensaje de Advertencia", "Este usuario ya esta Registrado", "warning");
 
         } else {
             console.log(resp)
@@ -310,7 +318,7 @@ function registrar_usuario() {
     })
 
 }
-function ValidarInputRegisUsuario(dni, nombre, apepat, apemat, pass, val_dni, val_nombre, val_apepat, val_apemat, val_pass) {
+function ValidarInputRegisUsuario(dni, nombre, apepat, apemat, pass, val_dni, val_nombre, val_apepat, val_apemat, val_pass,txt_correo,valid_correo) {
     if (dni != "") {
         if (document.getElementById(dni).value.length > 0 && document.getElementById(dni).value.length == 8) {
             $("#" + dni).removeClass("is-invalid").addClass("is-valid");
@@ -371,6 +379,18 @@ function ValidarInputRegisUsuario(dni, nombre, apepat, apemat, pass, val_dni, va
             document.getElementById(val_pass).innerHTML = '<b>LA CONTRASEÑA DEBE TENER MAS DE 8 CARACTERES</b>';
         }
     }
+    if (txt_correo != "") {
+        if (document.getElementById(txt_correo).value.length > 0 && document.getElementById(pass).value.length >= 8) {
+            $("#" + txt_correo).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_correo).removeClass("invalid-feedback").addClass("valid-feedback")
+            document.getElementById(valid_correo).innerHTML = '<b>CORRECTO</b>';
+        }
+        else {
+            $("#" + txt_correo).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_correo).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_correo).innerHTML = '<b>LLENE ESTE CAMPO</b>';
+        }
+    }
 }
 function limpiar_modalUsuarioRegistrado() {
     document.getElementById("txt_dni").value = "";
@@ -378,6 +398,7 @@ function limpiar_modalUsuarioRegistrado() {
     document.getElementById("txt_aPaterno").value = "";
     document.getElementById("txt_aMaterno").value = "";
     document.getElementById("txt_contraseña").value = "";
+    document.getElementById("txt_correo").value = "";
     document.getElementById("valid_nivel").innerHTML = '';
     $('#select_nivel').select2().val("").trigger('change.select2');
 
@@ -397,28 +418,30 @@ $('#tabla_usuario_simple').on('click', '.editar', function () {
     document.getElementById('txt_nombre_editar').value = data["usua_nombre"];
     document.getElementById('txt_aPaterno_editar').value = data["apepatusu"];
     document.getElementById('txt_aMaterno_editar').value = data["apematusu"];
+    document.getElementById('txt_correo_editar').value = data["correousu"];
     document.getElementById('txt_contra_editar').value = data["usua_clave"];
     //document.getElementById('txt_contra_repetir').value = data["usu_email"];
     $('#select_nivel_editar').select2().val(data["usua_nivel"]).trigger('change.select2');
     $('#select_estado_editar').select2().val(data["usua_estado"]).trigger('change.select2');
     ///ESTO ES PARA EDITAR LA CONTRA DEBIDO A QUE EL BOTON ESTA DENTRO DEL EDITAR
-    idusuc = document.getElementById('txt_idUsu_editar').value;
+    idusuc = data["idusu"];
 
 })
 function modificar_usuario() {
-    let idusu = document.getElementById('txt_idUsu_editar').value;
+    //let idusu = document.getElementById('txt_idUsu_editar').value;
     let dni = document.getElementById('txt_dni_editar').value;
     let nombre = document.getElementById('txt_nombre_editar').value;
     let apat = document.getElementById('txt_aPaterno_editar').value;
     let amat = document.getElementById('txt_aMaterno_editar').value;
     let contra = document.getElementById('txt_contra_editar').value;
-    let nivel = document.getElementById('select_nivel_editar').value;
+    let correo = document.getElementById('txt_correo_editar').value;
+    //let nivel = document.getElementById('select_nivel_editar').value;
     //let estado = document.getElementById('select_estado_editar').value;
     //return alert(contra);
 
-    if (dni.length == 0 || dni.length < 8 || nombre.length == 0 || apat.length == 0 || amat.length == 0 || contra.length == 0) {
+    if (dni.length == 0 || dni.length < 8 || nombre.length == 0 || apat.length == 0 || amat.length == 0 || contra.length == 0 || correo.length==0) {
         ValidarInputRegisUsuario("txt_dni_editar", "txt_nombre_editar", "txt_aPaterno_editar", "txt_aMaterno_editar", "txt_contra_editar",
-            "valid_dni_editar", "valid_nombre_editar", "valid_apepat_editar", "valid_apemat_editar", "valid_contra_editar");/// para que se me muesree lo rojo
+            "valid_dni_editar", "valid_nombre_editar", "valid_apepat_editar", "valid_apemat_editar", "valid_contra_editar",'txt_correo_editar','valid_correo_editar');/// para que se me muesree lo rojo
 
         return Swal.fire("Mensaje de Advertencia", "tiene algunos campos vacios", "warning");
     }
@@ -426,13 +449,14 @@ function modificar_usuario() {
         url: '../controller/usuario/controlador_modificar_usuario.php',
         type: 'POST',
         data: {
-            id: idusu,
+            id: idusuc,
             dni: dni,
             nombre: nombre,
             apat: apat,
             amat: amat,
+            correo:correo,
             contra: contra,
-            nivel: nivel,
+            //nivel: nivel,
             //estado: estado
         }
     }).done(function (resp) {
@@ -444,8 +468,11 @@ function modificar_usuario() {
                     tbl_usuario_simple.ajax.reload();
 
                 });
+            }else if (resp == 2) {
+                return Swal.fire("Mensaje de Advertencia", "Este DNI ya esta Registrado", "warning");
+            } else {
+                return Swal.fire("Mensaje de Advertencia", "Este correo electrónico ya esta Registrado", "warning");
             }
-            return Swal.fire("Mensaje de Advertencia", "Este DNI ya esta Registrado", "warning");
 
         } else {
             return Swal.fire("Mensaje de Advertencia", "No se pudo modificar el Usuario ", "error");

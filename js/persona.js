@@ -1466,9 +1466,22 @@ function modificarBeneficiario(){
     }
 }
 
+function obtenerNombreRepresentante(id){
+    $.ajax({
+        url: '../controller/persona/controlador_buscar_tutor_id.php',
+        type: 'POST',
+        data: {
+            id:id
+        }
+    }).done( function(resp){
+        const nom=JSON.parse(resp)
+        document.querySelector('#representante').value=nom.data[0]['nombre'];
+        
+    })
+}
+
 $('#tbl-persona').on('click', '.ver',function () {
     var data = tbl_persona.row($(this).parents('tr')).data();
-    console.log(data)
     if (tbl_persona.row(this).child.isShown()) {
         var data = tbl_persona.row(this).data();
     }
@@ -1477,11 +1490,15 @@ $('#tbl-persona').on('click', '.ver',function () {
     $("#modal-detalle").modal('show');
     document.querySelector('#fechanac').value=data['fecha_pe'];
     document.querySelector('#correo').value=data['correo_pe'];
-    document.querySelector('#certificado').value=data['numcertdisc'];
+    if (data['numcertdisc']=='') {
+        document.querySelector('#certificado').value='-';
+    } else {
+        document.querySelector('#certificado').value=data['numcertdisc'];
+    }
     if (data['dependiente_pe']==0) {
         document.querySelector('#representante').value='-';
     } else {
-        document.querySelector('#representante').value=data['dependiente_pe'];
+        obtenerNombreRepresentante(data['dependiente_pe']);
     }
     document.querySelector('#estadocivil').value=data['denominacion_esci'];
     document.querySelector('#direccion').value=data['direccion_pe'];

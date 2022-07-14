@@ -41,6 +41,7 @@
                                 <th>APELLIDO PATERNO</th>
                                 <th>APELLIDO MATERNO</th>
                                 <th>NOMBRE</th>
+                                <th>CORREO</th>
                                 <th>ESTADO</th>
                                 <th>ACCION</th>
 
@@ -94,6 +95,13 @@
                             <label for="">APELLIDO MATERNO</label>
                             <input type="text" id="txt_aMaterno" placeholder="Ingresar Apellido Materno" class="form-control" onkeypress=" return soloLetras(event);">
                             <div id="valid_apemat">
+                                </br>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label for="">CORREO ELECTRÓNICO</label>
+                            <input type="text" id="txt_correo" placeholder="Ingresar correo" class="form-control" >
+                            <div id="valid_correo">
                                 </br>
                             </div>
                         </div>
@@ -168,6 +176,13 @@
                                     <div id="valid_apemat_editar">
                                     </div>
                                     </br>
+                                </div>
+                                <div class="col-4">
+                                    <label for="">CORREO ELECTRÓNICO</label>
+                                    <input type="text" id="txt_correo_editar" placeholder="Ingresar correo" class="form-control" >
+                                    <div id="valid_correo_editar">
+                                        </br>
+                                    </div>
                                 </div>
                                 <div class="col-4">
                                     <label for="">NIVEL</label>

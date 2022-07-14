@@ -97,6 +97,23 @@ class Persona extends conexion_nueva{
         conexion_nueva::cerrar_conexion();
 
     }
+    function buscarTutorID($id){
+        $c = conexion_nueva::conectarBD();
+        $sql = "SELECT *FROM  sp_buscar_tutor_id(?)";
+        $query = $c->prepare($sql);
+        $query->bindParam(1, $id);
+        $query->execute();
+        $result = $query->fetchall(PDO::FETCH_ASSOC);
+        
+
+        $arreglo = array();
+        foreach ($result as $r) {
+            $arreglo["data"][] = $r;
+        }
+        return $arreglo;
+        conexion_nueva::cerrar_conexion();
+
+    }
     function buscarBeneficiarioRepresentantePDF($id){
         $c = conexion_nueva::conectarBD();
         $sql = "SELECT *FROM  sp_buscar_beneficiario_representante_pdf(?)";

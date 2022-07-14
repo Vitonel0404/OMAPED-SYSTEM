@@ -136,7 +136,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','usuario/mantenimiento_us.php')">
-                                        <i class="nav-icon fas fa-address-card"></i>
+                                        <i class="bi bi-person-fill"></i>
                                         <p>
                                             Usuarios
                                         </p>
@@ -145,7 +145,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','estado_civil/mantenimiento_estado_civil.php')">
-                                        <i class="nav-icon fas fa-address-card"></i>
+                                        <i class="bi bi-journal"></i>
                                         <p>
                                             Estado Civil
                                         </p>
@@ -154,7 +154,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','grado_instruccion/mantenimiento_grado_instruccion.php')">
-                                        <i class="nav-icon fas fa-address-card"></i>
+                                        <i class="bi bi-bookmark"></i>
                                         <p>
                                             Grado Instrucción
                                         </p>
@@ -163,7 +163,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','persona/mantenimiento_persona.php')">
-                                        <i class="nav-icon fas fa-address-card"></i>
+                                        <i class="bi bi-file-person"></i>
                                         <p>
                                             Persona
                                         </p>
@@ -172,7 +172,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','tipo_tramite/mantenimiento_tipo_tramite.php')">
-                                        <i class="nav-icon fas fa-address-card"></i>
+                                        <i class="bi bi-layout-text-sidebar"></i>
                                         <p>
                                             Tipo de trámite
                                         </p>
@@ -182,7 +182,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','tramite/mantenimiento_tramite.php')">
-                                <i class="nav-icon fas fa-th"></i>
+                                <i class="bi bi-journal-plus"></i>
                                 <p>Nuevo Trámite</p>
                             </a>
                         </li>
@@ -209,7 +209,75 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper" id="contenido_principal">
-            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-12">
+                            <h1 class="m-0 display-1">Dashboard</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3 id="id_tram_hoy" ></h3>
+
+                                    <p>Trámites diarios</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3 id="id_num_bene"></h3>
+
+                                    <p>Beneficiarios registrados</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3 id="id_num_repre"></h3>
+
+                                    <p>Representantes registrados</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ./col -->
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3 id="id_tram_total"></h3>
+
+                                    <p>Total de trámites</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+                            </div>
+                        </div>
+          <!-- ./col -->
+                    </div>
+                </div>
+            </section>
         </div>
         <!-- /.content-wrapper -->
 

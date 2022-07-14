@@ -49,7 +49,7 @@ function listarTramite(){
 async function listar(){
     try {
         const response = await fetch('../controller/tramite/controlador_listar_tramite.php');
-        const result= await response.json()
+        const result= await response.json();
         console.log(result)
         if ($.fn.DataTable.isDataTable('#tbl-tramite')) {
             $('#tbl-tramite').DataTable().destroy();
