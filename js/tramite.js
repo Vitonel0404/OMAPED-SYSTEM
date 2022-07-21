@@ -56,27 +56,36 @@ async function listar(){
         }
         $('#tbl-tramite tbody').html("");
         for(i=0;i<result.length;i++){
-            let den= result[i]['tipo_t_denominacion'];
+            let rol = document.querySelector('#txt_rolPrincipal').value;
             let fila = `<tr>`;
             fila += `<td>` + parseInt(i+1) + `</td>`;
             fila += `<td>` + result[i]['id_t'] + `</td>`;
             fila += `<td>` + result[i]['tipo_t_denominacion'] +`</td>`;
             fila += `<td>` + result[i]['fecha_t'] + `</td>`;
             fila += `<td>` + result[i]['persona_t_nombre'] + `</td>`;
-            if (result[i]['archivo_t']=='') {
-                fila += `<td>
-                        <a href='../view/pdf_tramite/solicitud_inicial.php?${result[i]['id_t']}'  class='descargar btn btn-primary btn-sm'><i class='bi bi-cloud-download-fill'></i></a>
-                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload" onclick="obtenerIDTramite(${result[i]['id_t']})"><i class='bi bi-cloud-upload-fill'></i></button>
-                    </td>`;
-            } else {
-                fila += `<td>
-                        <a href='../view/pdf_tramite/solicitud_inicial.php?${result[i]['id_t']}'  class='descargar btn btn-primary btn-sm'><i class='bi bi-cloud-download-fill'></i></a>
-                        <a href='../uploads/${result[i]['archivo_t']}'  class='descargar btn btn-secondary btn-sm' target=_blank><i class="bi bi-eye-fill"></i></a>
 
-                    </td>`;
-                
+            if(rol=='ADMIN'){
+                fila += `<td>
+                            <a href='../view/pdf_tramite/solicitud_inicial.php?${result[i]['id_t']}'  class='descargar btn btn-primary btn-sm'><i class='bi bi-cloud-download-fill'></i></a>
+                            <a href='../uploads/${result[i]['archivo_t']}'  class='descargar btn btn-secondary btn-sm' target=_blank><i class="bi bi-eye-fill"></i></a>
+                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload" onclick="obtenerIDTramite(${result[i]['id_t']})"><i class='bi bi-cloud-upload-fill'></i></button>
+                        </td>`;
+            }else{
+
+                if (result[i]['archivo_t']=='') {
+                    fila += `<td>
+                            <a href='../view/pdf_tramite/solicitud_inicial.php?${result[i]['id_t']}'  class='descargar btn btn-primary btn-sm'><i class='bi bi-cloud-download-fill'></i></a>
+                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#upload" onclick="obtenerIDTramite(${result[i]['id_t']})"><i class='bi bi-cloud-upload-fill'></i></button>
+                        </td>`;
+                } else {
+                    fila += `<td>
+                            <a href='../view/pdf_tramite/solicitud_inicial.php?${result[i]['id_t']}'  class='descargar btn btn-primary btn-sm'><i class='bi bi-cloud-download-fill'></i></a>
+                            <a href='../uploads/${result[i]['archivo_t']}'  class='descargar btn btn-secondary btn-sm' target=_blank><i class="bi bi-eye-fill"></i></a>
+
+                        </td>`;
+                    
+                }
             }
-            
 
             fila += `</tr>`;
             tbl_persona2=$('#tbl-tramite tbody').append(fila);

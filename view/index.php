@@ -7,9 +7,6 @@ if (!isset($_SESSION['S_IDUSUARIO'])) {
 $admi = "";
 $visitante = "";
 $operador = "";
-/* if($_SESSION['S_ROL']=="ADMIN"){
-    $admi="display:none;";
-}*/
 ?>
 
 <!DOCTYPE html>
@@ -133,7 +130,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                             </a>
+                            
                             <ul class="nav nav-treeview">
+                                <?php if ($_SESSION['S_ROL'] == "ADMIN") {
+
+                                ?>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','usuario/mantenimiento_us.php')">
                                         <i class="bi bi-person-fill"></i>
@@ -142,7 +143,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </p>
                                     </a>
                                 </li>
-
+                                
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','estado_civil/mantenimiento_estado_civil.php')">
                                         <i class="bi bi-journal"></i>
@@ -160,7 +161,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </p>
                                     </a>
                                 </li>
-
+                                <?php } ?>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','persona/mantenimiento_persona.php')">
                                         <i class="bi bi-file-person"></i>
@@ -169,7 +170,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </p>
                                     </a>
                                 </li>
-
+                                <?php if ($_SESSION['S_ROL'] == "ADMIN") {
+                                ?>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" onclick="cargar_contenido('contenido_principal','tipo_tramite/mantenimiento_tipo_tramite.php')">
                                         <i class="bi bi-layout-text-sidebar"></i>
@@ -178,6 +180,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </p>
                                     </a>
                                 </li>
+                                <?php } ?>
                             </ul>
                         </li>
                         <li class="nav-item">

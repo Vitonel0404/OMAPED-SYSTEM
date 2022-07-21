@@ -58,11 +58,11 @@ class model_usu extends conexion_nueva
 
         conexion_nueva::cerrar_conexion();
     }
-    function registrar_usuario($dni, $nombre, $apepat, $apemat,$correo, $contra)
+    function registrar_usuario($dni, $nombre, $apepat, $apemat,$correo, $contra,$nivel)
     {
         $c = conexion_nueva::conectarBD();
 
-        $sql = "SELECT *FROM  sp_registar_usuario(?,?,?,?,?,?) ";
+        $sql = "SELECT *FROM  sp_registar_usuario(?,?,?,?,?,?,?) ";
 
 
         $query = $c->prepare($sql);
@@ -72,6 +72,7 @@ class model_usu extends conexion_nueva
         $query->bindParam(4, $apemat);
         $query->bindParam(5, $correo);
         $query->bindParam(6, $contra);
+        $query->bindParam(7, $nivel);
         //$query->bindParam(6, $nivel);
         $query->execute();
         //solo se utiliza cuando no retornas un valor en el procedure
@@ -87,11 +88,11 @@ class model_usu extends conexion_nueva
 
         conexion_nueva::cerrar_conexion();
     }
-    function modificar_usuario($id, $dni, $nombre, $apepat, $apemat,$correo,$contra)
+    function modificar_usuario($id, $dni, $nombre, $apepat, $apemat,$correo,$contra,$nivel)
     {
         $c = conexion_nueva::conectarBD();
 
-        $sql = "SELECT *FROM  sp_modificar_usuario(?,?,?,?,?,?,?) ";
+        $sql = "SELECT *FROM  sp_modificar_usuario(?,?,?,?,?,?,?,?) ";
 
 
         $query = $c->prepare($sql);
@@ -102,7 +103,7 @@ class model_usu extends conexion_nueva
         $query->bindParam(5, $apemat);
         $query->bindParam(6, $correo);
         $query->bindParam(7, $contra);
-        //$query->bindParam(8, $estado);
+        $query->bindParam(8, $nivel);
         $query->execute();
         if ($row = $query->fetchColumn()) {
             return $row;

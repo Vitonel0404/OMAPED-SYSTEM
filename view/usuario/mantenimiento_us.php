@@ -42,6 +42,7 @@
                                 <th>APELLIDO MATERNO</th>
                                 <th>NOMBRE</th>
                                 <th>CORREO</th>
+                                <th>NIVEL</th>
                                 <th>ESTADO</th>
                                 <th>ACCION</th>
 
@@ -115,10 +116,9 @@
                         <div class="col-4">
                             <label for="">NIVEL</label>
                             <select class="js-example-basic-single " id="select_nivel" style="width:100%">
-                                <option value="">SELECCIONE UN NIVEL</option>
+                                <option value="" selected>SELECCIONE UN NIVEL</option>
                                 <option value="ADMIN">ADMIN</option>
                                 <option value="OPERADOR">OPERADOR</option>
-                                <option value="VISITANTE">VISITANTE</option>
                             </select>
                             <div id="valid_nivel">
                             </div>
@@ -189,7 +189,6 @@
                                     <select class="js-example-basic-single " id="select_nivel_editar" style="width:100%">
                                         <option value="ADMIN">ADMIN</option>
                                         <option value="OPERADOR">OPERADOR</option>
-                                        <option value="VISITANTE">VISITANTE</option>
                                     </select>
                                     <div id="valid_nivel_editar">
                                     </div>

@@ -30,11 +30,12 @@ function iniciar_Sesion() {
         let data = JSON.parse(resp);// Lo convierto a un objketo el json_encode
 
         if (data.length > 0) {
-            if (data[0]["usua_estado"] == 'INACTIVO') {
+            if (data[0]["usua_estado"] == 'I') {
 
                 return Swal.fire('OOPSS...', 'Lo sentimos el usuario <br>' + data[0]["nombre"] + "<b/> se encuentra " + data[0]["usua_estado"] + ", comuniquese con el administrador", 'warning');
 
             }
+            console.log(data[0]['usua_nivel'])
             $.ajax({
                 
                 url: 'controller/usuario/crear_sesion.php',
@@ -47,7 +48,7 @@ function iniciar_Sesion() {
                     nombre_usu: data[0]['nombreusu'],
                     usua_clave: data[0]['usua_clave'],
                     usuario: data[0]['nombre'],
-                    //rol: data[0][6]
+                    rol: data[0]['nivel']
                 },
 
             }).done(function (r) {
@@ -117,7 +118,7 @@ function listado_usu_simple() {
             { "data": "apematusu" },
             { "data": "usua_nombre" },
             { "data": "correousu" },
-            //{ "data": "usua_estado" },
+            { "data": "usua_level" },
             /*{
                 "data": "usua_nivel",
                 render: function (data, type, row) {
@@ -261,7 +262,7 @@ function registrar_usuario() {
     let apellido_m = document.getElementById("txt_aMaterno").value;
     let contraseña = document.getElementById("txt_contraseña").value;
     let correo = document.getElementById("txt_correo").value;
-    //let nivel = document.getElementById("select_nivel").value;
+    let nivel = document.getElementById("select_nivel").value;
 
     //document.getElementById("valid_dni").value;
 /*
@@ -271,9 +272,9 @@ function registrar_usuario() {
     }
     document.getElementById("valid_nivel").innerHTML = '<font size=2 color="green"><b>CORRECTO</b></font>';
 */
-    if (dni.length == 0 || dni.length < 8 || apellido_p.length == 0 || apellido_m.length == 0 || contraseña.length == 0 || contraseña.length < 8 || nombre.length == 0 || correo.length==0) {
+    if (nivel.length==0 || dni.length == 0 || dni.length < 8 || apellido_p.length == 0 || apellido_m.length == 0 || contraseña.length == 0 || contraseña.length < 8 || nombre.length == 0 || correo.length==0) {
         ValidarInputRegisUsuario("txt_dni", "txt_nombre", "txt_aPaterno", "txt_aMaterno", "txt_contraseña",
-            "valid_dni", "valid_nombre", "valid_apepat", "valid_apemat", "valid_contrasena",'txt_correo','valid_correo');/// para que se me muesree lo rojo
+            "valid_dni", "valid_nombre", "valid_apepat", "valid_apemat", "valid_contrasena",'txt_correo','valid_correo', 'select_nivel','valid_nivel');/// para que se me muesree lo rojo
         return Swal.fire("!Mensaje de Advertencia!", "<b>Llene todo los campos</b>", "warning");
 
     }
@@ -290,6 +291,7 @@ function registrar_usuario() {
             apemat: apellido_m,
             correo:correo,
             contra: contraseña,
+            nivel:nivel,
 
         }
     }).done(function (resp) {
@@ -318,7 +320,7 @@ function registrar_usuario() {
     })
 
 }
-function ValidarInputRegisUsuario(dni, nombre, apepat, apemat, pass, val_dni, val_nombre, val_apepat, val_apemat, val_pass,txt_correo,valid_correo) {
+function ValidarInputRegisUsuario(dni, nombre, apepat, apemat, pass, val_dni, val_nombre, val_apepat, val_apemat, val_pass,txt_correo,valid_correo,nivel,valid_nivel) {
     if (dni != "") {
         if (document.getElementById(dni).value.length > 0 && document.getElementById(dni).value.length == 8) {
             $("#" + dni).removeClass("is-invalid").addClass("is-valid");
@@ -391,6 +393,18 @@ function ValidarInputRegisUsuario(dni, nombre, apepat, apemat, pass, val_dni, va
             document.getElementById(valid_correo).innerHTML = '<b>LLENE ESTE CAMPO</b>';
         }
     }
+    if (nivel != "") {
+        if (document.getElementById(nivel).value.length > 0 && document.getElementById(pass).value.length >= 8) {
+            $("#" + nivel).removeClass("is-invalid").addClass("is-valid");
+            $("#" + valid_nivel).removeClass("invalid-feedback").addClass("valid-feedback")
+            document.getElementById(valid_nivel).innerHTML = '<b>CORRECTO</b>';
+        }
+        else {
+            $("#" + nivel).removeClass("is-valid").addClass("is-invalid");
+            $("#" + valid_nivel).removeClass("valid-feedback").addClass("invalid-feedback");
+            document.getElementById(valid_nivel).innerHTML = '<b>LLENE ESTE CAMPO</b>';
+        }
+    }
 }
 function limpiar_modalUsuarioRegistrado() {
     document.getElementById("txt_dni").value = "";
@@ -421,7 +435,7 @@ $('#tabla_usuario_simple').on('click', '.editar', function () {
     document.getElementById('txt_correo_editar').value = data["correousu"];
     document.getElementById('txt_contra_editar').value = data["usua_clave"];
     //document.getElementById('txt_contra_repetir').value = data["usu_email"];
-    $('#select_nivel_editar').select2().val(data["usua_nivel"]).trigger('change.select2');
+    $('#select_nivel_editar').select2().val(data["usua_level"]).trigger('change.select2');
     $('#select_estado_editar').select2().val(data["usua_estado"]).trigger('change.select2');
     ///ESTO ES PARA EDITAR LA CONTRA DEBIDO A QUE EL BOTON ESTA DENTRO DEL EDITAR
     idusuc = data["idusu"];
@@ -435,13 +449,13 @@ function modificar_usuario() {
     let amat = document.getElementById('txt_aMaterno_editar').value;
     let contra = document.getElementById('txt_contra_editar').value;
     let correo = document.getElementById('txt_correo_editar').value;
-    //let nivel = document.getElementById('select_nivel_editar').value;
+    let nivel = document.getElementById('select_nivel_editar').value;
     //let estado = document.getElementById('select_estado_editar').value;
     //return alert(contra);
 
-    if (dni.length == 0 || dni.length < 8 || nombre.length == 0 || apat.length == 0 || amat.length == 0 || contra.length == 0 || correo.length==0) {
+    if (nivel.length == 0 || dni.length == 0 || dni.length < 8 || nombre.length == 0 || apat.length == 0 || amat.length == 0 || contra.length == 0 || correo.length==0) {
         ValidarInputRegisUsuario("txt_dni_editar", "txt_nombre_editar", "txt_aPaterno_editar", "txt_aMaterno_editar", "txt_contra_editar",
-            "valid_dni_editar", "valid_nombre_editar", "valid_apepat_editar", "valid_apemat_editar", "valid_contra_editar",'txt_correo_editar','valid_correo_editar');/// para que se me muesree lo rojo
+            "valid_dni_editar", "valid_nombre_editar", "valid_apepat_editar", "valid_apemat_editar", "valid_contra_editar",'txt_correo_editar','valid_correo_editar','select_nivel_editar','valid_nivel_editar');/// para que se me muesree lo rojo
 
         return Swal.fire("Mensaje de Advertencia", "tiene algunos campos vacios", "warning");
     }
@@ -456,7 +470,7 @@ function modificar_usuario() {
             amat: amat,
             correo:correo,
             contra: contra,
-            //nivel: nivel,
+            nivel: nivel,
             //estado: estado
         }
     }).done(function (resp) {
