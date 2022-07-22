@@ -22,7 +22,7 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title"><b>LISTADO DE PERSONAS</b></h3>
-            <button type="button" class="btn btn-danger btn-sm float-right " data-toggle="modal" data-target="#modal-registro-persona"><i class="nav-icon fa fa-address-book" aria-hidden="true"></i> Nuevo Registro</button>
+            <button type="button" class="btn btn-danger btn-sm float-right " onclick="limpiarVARIABLESMODAL()"  data-toggle="modal" data-target="#modal-registro-persona"><i class="nav-icon fa fa-address-book" aria-hidden="true"></i> Nuevo Registro</button>
         </div>
         <div class="card-body">
             <div class="row">

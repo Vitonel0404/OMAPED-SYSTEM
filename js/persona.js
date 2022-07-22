@@ -1566,6 +1566,8 @@ function limpiarModificarRepresentante(){
 }
 
 function limpiarModificarBeneficiario(){
+    indicador=false;
+    id_p=0;
     document.querySelector('#id_dni_tutor_modificar').value='';
     document.querySelector('#id_nombre_tutor_modificar').value='';
     document.querySelector('#id_dni_modificar_beneficiario').value='';
@@ -1584,4 +1586,10 @@ function limpiarModificarBeneficiario(){
     $('#id_provincia_modificar_beneficiario').select2().val(0).trigger('change.select2');
     document.querySelector('#id_distrito_modificar_beneficiario').innerHTML='';
 
+}
+
+function limpiarVARIABLESMODAL(){
+    indicador=false;
+    id_p=0;
+    id_bene=0;
 }
