@@ -151,12 +151,12 @@ function listado_usu_simple() {
                 render: function (data, type, row) {
                     if (data == 'A') {
                         return "<button class='editar btn btn-primary btn-sm'><i class='fa fa-edit'></i></button>&nbsp;" +
-                            "<button class = 'btn btn-success btn-sm' disabled><i class = 'fa fa-check-circle'></i></button>&nbsp;" +
+                            //"<button class = 'btn btn-success btn-sm' disabled><i class = 'fa fa-check-circle'></i></button>&nbsp;" +
                             "<button class = 'desactivar btn btn-danger btn-sm'><i class = 'fa fa-ban'></i></button>";
                     } else {
                         return "<button class='editar btn btn-primary btn-sm'><i class='fa fa-edit'></i></button>&nbsp;" +
-                            "<button class = 'activar btn btn-success btn-sm' ><i class = 'fa fa-check-circle'></i></button>&nbsp;" +
-                            "<button class = 'btn btn-danger btn-sm' disabled><i class = 'fa fa-ban'></i></button>";
+                            "<button class = 'activar btn btn-success btn-sm' ><i class = 'fa fa-check-circle'></i></button>&nbsp;" 
+                            //"<button class = 'btn btn-danger btn-sm' disabled><i class = 'fa fa-ban'></i></button>";
                     }
                 }
             }

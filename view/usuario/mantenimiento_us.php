@@ -31,8 +31,8 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-12 table -responsive">
-                    <table id="tabla_usuario_simple" class="display" width="100%" style="text-align: center;">
+                <div class="col-12 table-responsive">
+                    <table class="table table-sm" id="tabla_usuario_simple" class="display" width="100%" style="text-align: center;">
                         
                         <thead>
                             <tr>
