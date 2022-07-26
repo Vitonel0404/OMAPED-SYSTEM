@@ -222,21 +222,29 @@ function buscarBeneficiario(){
             }
         }).done( function(resp){
             const nom=JSON.parse(resp)
-            if (nom['data'].length>0) {
-                if (nom['data'][0]['tipo']=='B') {
-                    if(nom['data'][0]['estado']=='A'){
-                        nombres.value=nom['data'][0]['nombre'];
+            console.log(resp)
+            console.log(nom)
+            if (nom.length>0) {
+                if (nom[0]['tipo']=='B') {
+                    if(nom[0]['estado']=='A'){
+                        nombres.value=nom[0]['nombre'];
                         indicador=true;
-                        id_perss=nom['data'][0]['id_p'];
+                        id_perss=nom[0]['id_p'];
                     }else{
                         return Swal.fire("Mensaje de Advertencia", "El representante se encuentra de baja, actualice su estado para continuar", "warning");  
                     }
                     
                 } else {
+                    nombres.value='';
+                    indicador=false;
+                    id_perss=0;
                     return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe como beneficiario", "warning"); 
                 }
                         
             } else {
+                nombres.value='';
+                indicador=false;
+                id_perss=0;
                 return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe", "warning");  
             }
         })

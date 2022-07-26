@@ -581,21 +581,27 @@ function buscarTutor(){
             }
         }).done( function(resp){
             const nom=JSON.parse(resp)
-            if (nom['data'].length>0) {
-                if (nom['data'][0]['tipo']=='R') {
-                    if(nom['data'][0]['estado']=='A'){
-                        nombres.value=nom['data'][0]['nombre'];
+            if (nom.length>0) {
+                if (nom[0]['tipo']=='R') {
+                    if(nom[0]['estado']=='A'){
+                        nombres.value=nom[0]['nombre'];
                         indicador=true;
-                        id_p=nom['data'][0]['id_p'];
+                        id_p=nom[0]['id_p'];
                     }else{
                         return Swal.fire("Mensaje de Advertencia", "El representante se encuentra de baja, actualice su estado para continuar", "warning");  
                     }
                     
                 } else {
+                    nombres.value='';
+                    indicador=false;
+                    id_perss=0;
                     return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe como representante", "warning"); 
                 }
                         
             } else {
+                nombres.value='';
+                indicador=false;
+                id_perss=0;
                 return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe", "warning");  
             }
         })

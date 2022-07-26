@@ -93,7 +93,8 @@ class Persona extends conexion_nueva{
         foreach ($result as $r) {
             $arreglo["data"][] = $r;
         }
-        return $arreglo;
+        //return $arreglo;
+        return $result;
         conexion_nueva::cerrar_conexion();
 
     }
