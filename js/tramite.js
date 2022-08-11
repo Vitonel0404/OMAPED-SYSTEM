@@ -231,16 +231,17 @@ function buscarBeneficiario(){
                         indicador=true;
                         id_perss=nom[0]['id_p'];
                     }else{
+                        nombres.value='';
+                        indicador=false;
+                        id_perss=0;
                         return Swal.fire("Mensaje de Advertencia", "El representante se encuentra de baja, actualice su estado para continuar", "warning");  
-                    }
-                    
+                    }            
                 } else {
                     nombres.value='';
                     indicador=false;
                     id_perss=0;
                     return Swal.fire("Mensaje de Advertencia", "DNI ingresada no existe como beneficiario", "warning"); 
                 }
-                        
             } else {
                 nombres.value='';
                 indicador=false;
@@ -249,6 +250,9 @@ function buscarBeneficiario(){
             }
         })
     } else {
+        nombres.value='';
+        indicador=false;
+        id_perss=0;
         return Swal.fire("Mensaje de Advertencia", "Ingrese un DNI válido de 8 caracteres", "warning");  
     }
 }
@@ -257,6 +261,7 @@ function limpiar_modalTramite(){
     $('#tipo_tramite_regitrar').select2().val('').trigger('change.select2');
     document.querySelector('#dni_registrar').value='';
     document.querySelector('#persona_registrar').value='';
+    indicador=false;
     id_perss=0;
 }
 function obtenerIDTramite(id){

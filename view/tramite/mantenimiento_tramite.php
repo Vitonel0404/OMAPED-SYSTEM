@@ -24,7 +24,7 @@
     <div class="card">
         <div class="card-header">
             <h3 class="card-title"><b>LISTADO DE TRÁMITES</b></h3>
-            <button type="button" class="btn btn-danger btn-sm float-right " data-toggle="modal" data-target="#modal-registro-tramite"><i class="nav-icon fa fa-address-book" aria-hidden="true"></i> Nuevo Registro</button>
+            <button type="button" class="btn btn-danger btn-sm float-right " data-toggle="modal" data-target="#modal-registro-tramite" onclick="limpiar_modalTramite()"><i class="nav-icon fa fa-address-book" aria-hidden="true"></i> Nuevo Registro</button>
         </div>
         <div class="card-body">
             <div class="row">
